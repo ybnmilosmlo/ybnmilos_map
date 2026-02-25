@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YBN Milos | Select Your City</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue: #00bfff;
+      --blue-dim: #00bfff44;
+      --blue-glow: #00bfff88;
+      --dark: #04040f;
+      --dark2: #0a0a1a;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--dark);
+      color: #e0e0e0;
+      font-family: 'Rajdhani', sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 60px;
+      border-bottom: 1px solid #00bfff11;
+      position: relative;
+      z-index: 10;
+    }
+    .nav-logo img {
+      height: 44px;
+      filter: brightness(0) saturate(100%) invert(58%) sepia(98%) saturate(400%) hue-rotate(170deg) brightness(110%) drop-shadow(0 0 8px #00bfff);
+    }
+    .nav-back {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #666;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+    .nav-back:hover { color: var(--blue); }
+
+    /* ── HEADER ── */
+    .page-header {
+      text-align: center;
+      padding: 50px 40px 30px;
+      position: relative;
+      z-index: 1;
+    }
+    .page-header-sub {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 6px;
+      color: var(--blue);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .page-header h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(40px, 6vw, 72px);
+      letter-spacing: 6px;
+      color: #fff;
+      text-shadow: 0 0 40px #00bfff22;
+    }
+    .page-header p {
+      color: #555;
+      font-size: 14px;
+      letter-spacing: 2px;
+      margin-top: 10px;
+    }
+
+    /* ── CITY CARDS ── */
+    .cities-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 40px 40px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .city-cards {
+      display: flex;
+      flex-direction: row;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding-bottom: 10px;
+    }
+
+    .city-card {
+      width: 175px;
+      height: 560px;
+      background-size: cover;
+      background-position: center;
+      border-radius: 14px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      text-decoration: none;
+      border: 1px solid #00bfff22;
+      transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+      flex-shrink: 0;
+    }
+    .city-card:hover {
+      transform: translateY(-10px) scale(1.04);
+      border-color: var(--blue-glow);
+      box-shadow: 0 0 40px var(--blue-dim), 0 25px 50px rgba(0,0,0,0.7);
+    }
+    .city-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,20,0.3) 60%, transparent 100%);
+      transition: background 0.4s ease;
+    }
+    .city-card:hover .city-card-overlay {
+      background: linear-gradient(to top, rgba(0,15,40,0.96) 0%, rgba(0,50,80,0.5) 60%, rgba(0,100,150,0.15) 100%);
+    }
+    .city-card-content {
+      position: absolute;
+      bottom: 24px;
+      left: 0;
+      right: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .city-card-name {
+      color: #ffffff;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: 4px;
+      margin: 0;
+      text-shadow: 0 0 20px #00bfff66;
+      text-align: center;
+      padding: 0 10px;
+    }
+    .city-card-hint {
+      color: var(--blue);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 5px;
+      margin: 0;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: all 0.3s ease;
+    }
+    .city-card:hover .city-card-hint {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── BG ── */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,191,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,191,255,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 20px;
+      border-top: 1px solid #00bfff11;
+      font-size: 12px;
+      color: #333;
+      letter-spacing: 1px;
+    }
+
+    /* scrollbar */
+    .city-cards::-webkit-scrollbar { height: 4px; }
+    .city-cards::-webkit-scrollbar-track { background: transparent; }
+    .city-cards::-webkit-scrollbar-thumb { background: var(--blue-dim); border-radius: 2px; }
+  </style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <img src="https://i.imgur.com/RAQAJzb.png" alt="YBN">
+  </div>
+  <a href="index.html" class="nav-back">← Back to Home</a>
+</nav>
+
+<!-- HEADER -->
+<div class="page-header">
+  <div class="page-header-sub">YBN Milos MLO World</div>
+  <h1>SELECT YOUR CITY</h1>
+  <p>Click on a city to enter the store</p>
+</div>
+
+<!-- CITY CARDS -->
+<div class="cities-container">
+  <div class="city-cards">
+
+    <a class="city-card" href="https://ybnmilos-mlo-world.tebex.io/category/detroit" style="background-image: url('https://i.imgur.com/78XyWKi.jpeg')">
+      <div class="city-card-overlay"></div>
+      <div class="city-card-content">
+        <h2 class="city-card-name">DETROIT</h2>
+        <p class="city-card-hint">ENTER</p>
+      </div>
+    </a>
+
+    <a class="city-card" href="https://ybnmilos-mlo-world.tebex.io/category/weekly-discounts?package=5573516" style="background-image: url('https://i.imgur.com/3Kshoj1.jpeg')">
+      <div class="city-card-overlay"></div>
+      <div class="city-card-content">
+        <h2 class="city-card-name">PHILADELPHIA</h2>
+        <p class="city-card-hint">ENTER</p>
+      </div>
+    </a>
+
+    <a class="city-card" href="https://ybnmilos-mlo-world.tebex.io/category/ybnmilosprojectshoo?package=6600073" style="background-image: url('https://i.imgur.com/w2a7PEZ.jpeg')">
+      <div class="city-card-overlay"></div>
+      <div class="city-card-content">
+        <h2 class="city-card-name">BATON ROUGE</h2>
+        <p class="city-card-hint">ENTER</p>
+      </div>
+    </a>
+
+    <a class="city-card" href="https://ybnmilos-mlo-world.tebex.io/category/weekly-discounts?package=5377134" style="background-image: url('https://i.imgur.com/qfWzpQn.jpeg')">
+      <div class="city-card-overlay"></div>
+      <div class="city-card-content">
+        <h2 class="city-card-name">BALTIMORE</h2>
+        <p class="city-card-hint">ENTER</p>
+      </div>
+    </a>
+
+    <a class="city-card" href="https://ybnmilos-mlo-world.tebex.io/category/chicago" style="background-image: url('https://i.imgur.com/UisAZwn.jpeg')">
+      <div class="city-card-overlay"></div>
+      <div class="city-card-content">
+        <h2 class="city-card-name">CHICAGO</h2>
+        <p class="city-card-hint">ENTER</p>
+      </div>
+    </a>
+
+    <a class="city-card" href="https://ybnmilos-mlo-world.tebex.io/category/1842533" style="background-image: url('https://i.imgur.com/PmDVl46.jpeg')">
+      <div class="city-card-overlay"></div>
+      <div class="city-card-content">
+        <h2 class="city-card-name">LOS SANTOS</h2>
+        <p class="city-card-hint">ENTER</p>
+      </div>
+    </a>
+
+    <a class="city-card" href="https://ybnmilos-mlo-world.tebex.io/category/chicago-skyscrappers" style="background-image: url('https://i.imgur.com/234Hp6z.jpeg')">
+      <div class="city-card-overlay"></div>
+      <div class="city-card-content">
+        <h2 class="city-card-name">CHICAGO SKYSCRAPERS</h2>
+        <p class="city-card-hint">ENTER</p>
+      </div>
+    </a>
+
+    <a class="city-card" href="https://ybnmilos-mlo-world.tebex.io/category/ybnmilosprojectshoo?package=5994916" style="background-image: url('https://i.imgur.com/d8faEgE.jpeg')">
+      <div class="city-card-overlay"></div>
+      <div class="city-card-content">
+        <h2 class="city-card-name">PALETO</h2>
+        <p class="city-card-hint">ENTER</p>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<footer>© 2025 YBN Milos MLO World — All Rights Reserved</footer>
+
+</body>
+</html>
