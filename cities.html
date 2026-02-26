@@ -195,6 +195,25 @@
     .city-cards::-webkit-scrollbar { height: 4px; }
     .city-cards::-webkit-scrollbar-track { background: transparent; }
     .city-cards::-webkit-scrollbar-thumb { background: var(--blue-dim); border-radius: 2px; }
+
+    /* ── CURSOR ── */
+    * { cursor: none !important; }
+    #cursor {
+      position: fixed;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,191,255,0.15) 0%, rgba(0,191,255,0.06) 50%, transparent 100%);
+      pointer-events: none;
+      z-index: 99999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.15s ease;
+      filter: blur(6px);
+    }
+    #cursor.hover {
+      transform: translate(-50%, -50%) scale(1.5);
+      background: radial-gradient(circle, rgba(0,191,255,0.2) 0%, rgba(0,191,255,0.08) 50%, transparent 100%);
+    }
   </style>
 </head>
 <body>
@@ -289,5 +308,19 @@
 
 <footer>© 2025 YBN Milos MLO World — All Rights Reserved</footer>
 
+
+<!-- CURSOR -->
+<div id="cursor"></div>
+<script>
+var cursor = document.getElementById('cursor');
+document.addEventListener('mousemove', function(e) {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+});
+document.querySelectorAll('a, button, .city-card').forEach(function(el) {
+  el.addEventListener('mouseenter', function() { cursor.classList.add('hover'); });
+  el.addEventListener('mouseleave', function() { cursor.classList.remove('hover'); });
+});
+</script>
 </body>
 </html>

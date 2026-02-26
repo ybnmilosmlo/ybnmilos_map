@@ -498,6 +498,25 @@
       color: var(--blue);
       text-transform: uppercase;
     }
+
+    /* ── CURSOR ── */
+    * { cursor: none !important; }
+    #cursor {
+      position: fixed;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,191,255,0.15) 0%, rgba(0,191,255,0.06) 50%, transparent 100%);
+      pointer-events: none;
+      z-index: 99999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.15s ease;
+      filter: blur(6px);
+    }
+    #cursor.hover {
+      transform: translate(-50%, -50%) scale(1.5);
+      background: radial-gradient(circle, rgba(0,191,255,0.2) 0%, rgba(0,191,255,0.08) 50%, transparent 100%);
+    }
   </style>
 </head>
 <body>
@@ -685,5 +704,19 @@ setTimeout(function() {
 }, 3000);
 </script>
 
+
+<!-- CURSOR -->
+<div id="cursor"></div>
+<script>
+var cursor = document.getElementById('cursor');
+document.addEventListener('mousemove', function(e) {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+});
+document.querySelectorAll('a, button, .map-zone, .zone-group, .city-card, .social-link, .nav-cta').forEach(function(el) {
+  el.addEventListener('mouseenter', function() { cursor.classList.add('hover'); });
+  el.addEventListener('mouseleave', function() { cursor.classList.remove('hover'); });
+});
+</script>
 </body>
 </html>
