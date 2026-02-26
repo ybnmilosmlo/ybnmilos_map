@@ -124,6 +124,16 @@
     #main.loaded { opacity: 1; }
 
     /* ── BACKGROUND ── */
+    .bg-image {
+      position: fixed;
+      inset: 0;
+      background-image: url('https://i.ibb.co/S7BcVK6V/wireframe.jpg');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.12;
+      pointer-events: none;
+      z-index: 0;
+    }
     .bg-grid {
       position: fixed;
       inset: 0;
@@ -536,6 +546,7 @@
 
 <!-- MAIN -->
 <div id="main">
+  <div class="bg-image"></div>
   <div class="bg-grid"></div>
   <div class="bg-glow"></div>
 
