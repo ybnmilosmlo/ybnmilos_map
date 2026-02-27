@@ -527,6 +527,352 @@
       transform: translate(-50%, -50%) scale(1.5);
       background: radial-gradient(circle, rgba(0,191,255,1) 0%, rgba(0,191,255,0.5) 50%, transparent 100%);
     }
+
+    /* ── ZONE MODAL ── */
+    #zone-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 99990;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+    #zone-overlay.show { display: flex; }
+
+    #zone-modal {
+      background: #0a0a1a;
+      border: 1px solid #00bfff44;
+      border-radius: 16px;
+      padding: 36px 32px;
+      width: 360px;
+      box-shadow: 0 0 60px #00bfff22;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      animation: modalIn 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.92) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    #zone-modal .modal-close {
+      position: absolute;
+      top: 14px; right: 16px;
+      background: transparent;
+      border: none;
+      color: #555;
+      font-size: 20px;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    #zone-modal .modal-close:hover { color: #fff; }
+    #zone-modal .modal-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 26px;
+      letter-spacing: 3px;
+      color: #fff;
+      text-shadow: 0 0 20px #00bfff44;
+    }
+    #zone-modal .modal-sub {
+      font-size: 13px;
+      color: #666;
+      letter-spacing: 1px;
+      margin-top: -8px;
+    }
+    #zone-modal .modal-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      border-radius: 10px;
+      border: 1px solid #00bfff33;
+      background: transparent;
+      color: #fff;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s;
+      width: 100%;
+    }
+    #zone-modal .modal-btn:hover {
+      background: #00bfff11;
+      border-color: #00bfff88;
+      box-shadow: 0 0 20px #00bfff22;
+      color: #00bfff;
+    }
+    #zone-modal .modal-btn .btn-icon { font-size: 20px; }
+    #zone-modal .modal-btn.fix { border-color: #ff880033; }
+    #zone-modal .modal-btn.fix:hover {
+      background: #ff880011;
+      border-color: #ff8800aa;
+      color: #ff8800;
+      box-shadow: 0 0 20px #ff880022;
+    }
+
+    /* ── FIX MODAL ── */
+    #fix-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 99995;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+    #fix-overlay.show { display: flex; }
+    #fix-modal {
+      background: #0a0a1a;
+      border: 1px solid #ff880044;
+      border-radius: 16px;
+      padding: 36px 32px;
+      width: min(500px, 90vw);
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 0 60px #ff880022;
+      position: relative;
+      animation: modalIn 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    #fix-modal .modal-close {
+      position: absolute;
+      top: 14px; right: 16px;
+      background: transparent;
+      border: none;
+      color: #555;
+      font-size: 20px;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    #fix-modal .modal-close:hover { color: #fff; }
+    #fix-modal .fix-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 26px;
+      letter-spacing: 3px;
+      color: #ff8800;
+      margin-bottom: 8px;
+    }
+    #fix-modal .fix-zone {
+      font-size: 13px;
+      color: #666;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    #fix-modal .fix-content {
+      font-size: 14px;
+      color: #aaa;
+      line-height: 1.8;
+      letter-spacing: 0.5px;
+    }
+    .fix-step {
+      font-size: 13px;
+      color: #aaa;
+      line-height: 1.8;
+      margin-bottom: 16px;
+      padding: 14px 16px;
+      background: #ffffff06;
+      border-left: 3px solid #ff880055;
+      border-radius: 0 8px 8px 0;
+    }
+    .fix-step strong { color: #fff; }
+    .fix-warning { color: #ff8800; font-weight: 700; }
+    .fix-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .fix-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      transition: all 0.3s;
+    }
+    .fix-link.discord {
+      background: #5865f211;
+      border: 1px solid #5865f244;
+      color: #5865f2;
+    }
+    .fix-link.discord:hover { background: #5865f222; border-color: #5865f2; }
+    .fix-link.video {
+      background: #00bfff11;
+      border: 1px solid #00bfff44;
+      color: #00bfff;
+    }
+    .fix-link.video:hover { background: #00bfff22; border-color: #00bfff; }
+
+    .fix-checks { margin-bottom: 20px; }
+    .fix-checks-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #666;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .fix-check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #ffffff08;
+      cursor: pointer;
+      font-size: 13px;
+      color: #aaa;
+      line-height: 1.5;
+      transition: color 0.2s;
+    }
+    .fix-check-item:hover { color: #fff; }
+    .fix-checkbox {
+      width: 18px;
+      height: 18px;
+      min-width: 18px;
+      accent-color: #00bfff;
+      cursor: pointer;
+      margin-top: 2px;
+    }
+    .fix-understand-btn {
+      width: 100%;
+      padding: 16px;
+      background: #00bfff22;
+      border: 1px solid #00bfff44;
+      border-radius: 10px;
+      color: #666;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      cursor: not-allowed;
+      transition: all 0.3s;
+    }
+    .fix-understand-btn:not(:disabled) {
+      background: #00bfff;
+      border-color: #00bfff;
+      color: #000;
+      cursor: pointer;
+      box-shadow: 0 0 20px #00bfff44;
+    }
+    .fix-understand-btn:not(:disabled):hover {
+      box-shadow: 0 0 30px #00bfff88;
+      transform: translateY(-1px);
+    }
+
+
+
+    /* ── FILES MODAL ── */
+    #files-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 99998;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+    #files-overlay.show { display: flex; }
+    #files-modal {
+      background: #0a0a1a;
+      border: 1px solid #00bfff44;
+      border-radius: 16px;
+      padding: 36px 32px;
+      width: min(500px, 90vw);
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 0 60px #00bfff22;
+      position: relative;
+      animation: modalIn 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    #files-modal .modal-close {
+      position: absolute;
+      top: 14px; right: 16px;
+      background: transparent;
+      border: none;
+      color: #555;
+      font-size: 20px;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    #files-modal .modal-close:hover { color: #fff; }
+    .files-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 26px;
+      letter-spacing: 3px;
+      color: #00bfff;
+      margin-bottom: 6px;
+    }
+    .files-zone {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: #555;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    
+    .file-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      margin-bottom: 8px;
+      background: #ffffff05;
+      border: 1px solid #00bfff11;
+      border-radius: 8px;
+      gap: 12px;
+    }
+    .file-name {
+      font-family: monospace;
+      font-size: 13px;
+      color: #00bfff;
+      word-break: break-all;
+    }
+    .copy-btn {
+      background: transparent;
+      border: 1px solid #00bfff44;
+      color: #00bfff;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .copy-btn:hover {
+      background: #00bfff22;
+      border-color: #00bfff;
+    }
+
+    .files-content {
+      font-size: 13px;
+      color: #aaa;
+      line-height: 2;
+      letter-spacing: 0.5px;
+      white-space: pre-wrap;
+      background: #ffffff05;
+      border: 1px solid #00bfff11;
+      border-radius: 8px;
+      padding: 16px;
+      font-family: monospace;
+    }
+
   </style>
 </head>
 <body>
@@ -729,5 +1075,192 @@ document.querySelectorAll('a, button, .map-zone, .zone-group, .city-card, .socia
   el.addEventListener('mouseleave', function() { cursor.classList.remove('hover'); });
 });
 </script>
+
+<!-- ZONE MODAL -->
+<div id="zone-overlay">
+  <div id="zone-modal">
+    <button class="modal-close" onclick="closeZoneModal()">✕</button>
+    <div class="modal-title" id="modal-city-name">CITY NAME</div>
+    <div class="modal-sub">What would you like to do?</div>
+    <a class="modal-btn visit" id="modal-visit-btn" href="#" target="_blank">
+      <span class="btn-icon">🏙️</span> Visit City Store
+    </a>
+    <button class="modal-btn fix" onclick="openFixModal()">
+      <span class="btn-icon">🔧</span> Fix Conflicting Map
+    </button>
+  </div>
+</div>
+
+<!-- FIX MODAL -->
+<div id="fix-overlay">
+  <div id="fix-modal">
+    <button class="modal-close" onclick="closeFixModal()">✕</button>
+    <div class="fix-title">FIX CONFLICTING MAP</div>
+    <div class="fix-zone" id="fix-zone-name"></div>
+    <div class="fix-content">
+      <div class="fix-step">
+        <span class="fix-warning">⚠️ MUST REMEMBER!</span> If you are using WinSCP or FileZilla, 100% it won't search the files correctly! What we suggest is to drag your whole <strong>RESOURCE FOLDER</strong> (not [maps], not [streamable]) to your Desktop so you can use your File Explorer search engine.
+      </div>
+      <div class="fix-step">
+        If you refuse to drag your whole resource folder, start taking <strong>5 by 5 MLOs</strong> out of your server until the issue stops. As soon as it stops, find the MLO that's conflicting with it and keep the process going from below!
+      </div>
+      <div class="fix-step">
+        When searching the files named below, make sure it's the <strong>resource folder</strong> and delete from the other creator's folder. Don't worry about breaking their part of the map. If by any chance that happens, make a ticket in our Discord.
+      </div>
+      <div class="fix-links">
+        <a href="https://discord.com/invite/GJMpY39Q8J" target="_blank" class="fix-link discord">💬 Discord Support</a>
+        <a href="https://streamable.com/wlsupe" target="_blank" class="fix-link video">▶ Video: How to Search Files</a>
+      </div>
+
+      <div class="fix-checks">
+        <p class="fix-checks-title">Please confirm you understand before continuing:</p>
+        <label class="fix-check-item">
+          <input type="checkbox" class="fix-checkbox" onchange="checkAll()">
+          <span>I will use File Explorer, not WinSCP or FileZilla</span>
+        </label>
+        <label class="fix-check-item">
+          <input type="checkbox" class="fix-checkbox" onchange="checkAll()">
+          <span>I will drag my full resource folder to Desktop to search</span>
+        </label>
+        <label class="fix-check-item">
+          <input type="checkbox" class="fix-checkbox" onchange="checkAll()">
+          <span>I understand to delete only from the other creator's folder</span>
+        </label>
+      </div>
+
+      <button class="fix-understand-btn" id="fix-understand-btn" disabled onclick="openFilesModal()">
+        I UNDERSTAND
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+var zoneData = {
+  'Southside': {
+    tebex: 'INSERT_TEBEX_LINK',
+    files: ['lr_sc1_occl_00.ymap', 'lr_sc1_occl_01.ymap', 'lr_sc1_occl_02.ymap','lr_sc1_occl_03.ymap']
+  },
+  'Downtown': {
+    tebex: 'INSERT_TEBEX_LINK',
+    files: ['apa_ss1_occl_00',  'apa_ss1_occl_01', 'hei_kt1_occl_02',  'hei_sm_occl_00',  'hei_sm_occl_02',  'hei_sm_occl_03', 'vb_occl_00' 'apa_ss1_occl_02',  'apa_ss1_occl_03',  'ch1_far_occl_00',  'hei_bh1_occl_00',  'hei_bh1_occl_02',  'hei_bh1_occl_04',  'hei_bh1_occl_05',  'hei_dt1_occl_01',  'hei_dt1_occl_02', 'hei_dt1_occl_03', 'hei_dt1_occl_04','hei_dt1_occl_06','hei_dt1_occl_07',  'hei_hw1_occl_00',  'hei_hw1_occl_01',
+     
+  },
+  'Vespucci': {
+    tebex: 'INSERT_TEBEX_LINK',
+    files: ['vb_occl_00.ymap', 'vb_occl_01.ymap']
+  },
+  'East Los Santos': {
+    tebex: 'INSERT_TEBEX_LINK',
+    files: ['bkr_id1_occl_00.ymap', 'bkr_id1_occl_01.ymap', 'bkr_id1_occl_02.ymap' 'bkr_id1_occl_03.ymap']
+  },
+  'Vinewood': {
+    tebex: 'INSERT_TEBEX_LINK',
+    files: ['apa_ch2_occl_05.ymap',  'apa_ch2_occl_02.ymap',  'apa_ch2_occl_03.ymap',  'apa_ch2_occl_04.ymap',  'apa_ch2_occl_05.ymap',  'apa_ch2_occl_06.ymap',  'ch1_far_occl_00.ymap']
+  },
+  'Baltimore/Philly': {
+    tebex: 'INSERT_TEBEX_LINK',
+    files: ['cs4_occl_01.ymap',  'cs4_occl_03.ymap',  'cs4_occl_04.ymap',  'cs4_occl_05.ymap',  'cs4_occl_06.ymap']
+  },
+  'Paleto': {
+    tebex: 'INSERT_TEBEX_LINK',
+    files: ['cs1_far_occl_00ymap',  'cs1_occl_07ymap',  'cs1_occl_09ymap',  'cs1_occl_10ymap',  'cs1_occl_11ymap']
+  }
+};
+
+var currentZone = '';
+
+function openZoneModal(zoneName) {
+  currentZone = zoneName;
+  document.getElementById('modal-city-name').textContent = zoneName;
+  document.getElementById('modal-visit-btn').href = zoneData[zoneName].tebex;
+  document.getElementById('zone-overlay').classList.add('show');
+}
+
+function closeZoneModal() {
+  document.getElementById('zone-overlay').classList.remove('show');
+}
+
+function openFixModal() {
+  closeZoneModal();
+  document.getElementById('fix-zone-name').textContent = currentZone;
+  document.getElementById('fix-overlay').classList.add('show');
+}
+
+function closeFixModal() {
+  document.getElementById('fix-overlay').classList.remove('show');
+  document.querySelectorAll('.fix-checkbox').forEach(function(cb) { cb.checked = false; });
+  document.getElementById('fix-understand-btn').disabled = true;
+}
+
+function openFilesModal() {
+  closeFixModal();
+  document.getElementById('files-zone-name').textContent = currentZone;
+  var files = zoneData[currentZone].files;
+  var container = document.getElementById('files-content-text');
+  container.innerHTML = '';
+  files.forEach(function(file) {
+    var row = document.createElement('div');
+    row.className = 'file-row';
+    row.innerHTML = '<span class="file-name">' + file + '</span><button class="copy-btn" onclick="copyFile(this, \'' + file.replace(/'/g, "\\'") + '\')">COPY</button>';
+    container.appendChild(row);
+  });
+  document.getElementById('files-overlay').classList.add('show');
+}
+
+function copyFile(btn, text) {
+  navigator.clipboard.writeText(text).then(function() {
+    btn.textContent = 'COPIED!';
+    btn.style.background = '#00bfff';
+    btn.style.color = '#000';
+    setTimeout(function() {
+      btn.textContent = 'COPY';
+      btn.style.background = '';
+      btn.style.color = '';
+    }, 2000);
+  });
+}
+
+function closeFilesModal() {
+  document.getElementById('files-overlay').classList.remove('show');
+}
+
+function checkAll() {
+  var boxes = document.querySelectorAll('.fix-checkbox');
+  var allChecked = Array.from(boxes).every(function(cb) { return cb.checked; });
+  document.getElementById('fix-understand-btn').disabled = !allChecked;
+}
+
+// Close on overlay click
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('zone-overlay').addEventListener('click', function(e) {
+    if (e.target === this) closeZoneModal();
+  });
+  document.getElementById('fix-overlay').addEventListener('click', function(e) {
+    if (e.target === this) closeFixModal();
+  });
+  document.getElementById('files-overlay').addEventListener('click', function(e) {
+    if (e.target === this) closeFilesModal();
+  });
+  document.querySelectorAll('.zone-group').forEach(function(zone) {
+    zone.addEventListener('click', function() {
+      var text = this.querySelector('.zone-text');
+      if (text) openZoneModal(text.textContent.trim());
+    });
+  });
+});
+</script>
+
+
+<!-- FILES MODAL -->
+<div id="files-overlay">
+  <div id="files-modal">
+    <button class="modal-close" onclick="closeFilesModal()">✕</button>
+    <div class="files-title">🗂️ FILES TO DELETE</div>
+    <div class="files-zone" id="files-zone-name"></div>
+    <div class="files-content" id="files-content-text">INSERT FILES FOR THIS ZONE</div>
+  </div>
+</div>
+
 </body>
 </html>
