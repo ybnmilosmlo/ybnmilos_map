@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YBN Milos | MLO World</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue: #00bfff;
+      --blue-dim: #00bfff44;
+      --blue-glow: #00bfff88;
+      --dark: #04040f;
+      --dark2: #0a0a1a;
+      --text: #e0e0e0;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--dark);
+      color: var(--text);
+      font-family: 'Rajdhani', sans-serif;
+      overflow-x: hidden;
+      cursor: default;
+    }
+
+    /* ── PRELOADER ── */
+    #preloader {
+      position: fixed;
+      inset: 0;
+      background: #04040f;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 1.8s cubic-bezier(0.4,0,0.2,1);
+    }
+    #preloader.hide { opacity: 0; pointer-events: none; }
+
+    .pre-logo-wrap {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      margin-bottom: 30px;
+    }
+    .pre-img-outline {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      opacity: 0.10;
+      filter: brightness(0) invert(1);
+    }
+    .pre-img-fill {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      clip-path: inset(100% 0 0 0);
+      animation: fillUp 3s cubic-bezier(0.4,0,0.2,1) forwards;
+      filter: brightness(0) saturate(100%) invert(58%) sepia(98%) saturate(400%) hue-rotate(170deg) brightness(110%) drop-shadow(0 0 6px #00bfff) drop-shadow(0 0 12px #00bfffaa);
+    }
+    @keyframes fillUp {
+      0% { clip-path: inset(100% 0 0 0); }
+      100% { clip-path: inset(0% 0 0 0); }
+    }
+    .pre-glow-left, .pre-glow-right {
+      position: absolute;
+      top: 10%;
+      width: 40px;
+      height: 80%;
+      background: #00bfff;
+      filter: blur(25px);
+      opacity: 0;
+      animation: glowSides 3s cubic-bezier(0.4,0,0.2,1) forwards;
+      border-radius: 50%;
+    }
+    .pre-glow-left { left: -20px; }
+    .pre-glow-right { right: -20px; }
+    @keyframes glowSides {
+      0% { opacity: 0; }
+      30% { opacity: 0.10; }
+      80% { opacity: 0.10; }
+      100% { opacity: 0; }
+    }
+    .pre-title {
+      color: #fff;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 6px;
+      margin-bottom: 6px;
+    }
+    .pre-sub {
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 8px;
+      margin-bottom: 16px;
+    }
+    .pre-dots { display: flex; gap: 6px; }
+    .pre-dots span {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--blue);
+      animation: dot 1.2s infinite;
+    }
+    .pre-dots span:nth-child(2) { animation-delay: 0.2s; background: #aaa; }
+    .pre-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes dot {
+      0%,100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    /* ── MAIN CONTENT ── */
+    #main {
+      opacity: 0;
+      transition: opacity 4s cubic-bezier(0.4,0,0.2,1);
+      min-height: 100vh;
+    }
+    #main.loaded { opacity: 1; }
+
+    /* ── BACKGROUND ── */
+    .bg-image {
+      position: fixed;
+      inset: 0;
+      background-image: url('https://i.ibb.co/PsNRzWxj/wireframe2.jpg');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.05;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,191,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,191,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .bg-glow {
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #00bfff0a 0%, transparent 70%);
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 60px;
+      border-bottom: 1px solid #00bfff11;
+      backdrop-filter: blur(10px);
+    }
+    .nav-logo img {
+      height: 50px;
+      filter: brightness(0) saturate(100%) invert(58%) sepia(98%) saturate(400%) hue-rotate(170deg) brightness(110%) drop-shadow(0 0 8px #00bfff);
+    }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: #aaa;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--blue); }
+    .nav-cta {
+      background: transparent;
+      border: 1px solid var(--blue);
+      color: var(--blue);
+      padding: 10px 28px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      cursor: pointer;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    .nav-cta:hover {
+      background: var(--blue);
+      color: #000;
+      box-shadow: 0 0 20px var(--blue-glow);
+    }
+
+    /* ── HERO / MAP ── */
+    .hero {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 20px;
+      gap: 20px;
+    }
+
+    /* MAP */
+    .map-wrap {
+      position: relative;
+      width: min(1100px, 96vw);
+      overflow: hidden;
+      border-radius: 16px;
+      border: 1px solid #00bfff22;
+      box-shadow: 0 0 40px #00bfff11;
+    }
+    .map-wrap img.map-img {
+      width: 100%;
+      display: block;
+      transform-origin: center center;
+      transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
+    }
+    .map-svg {
+      transform-origin: center center;
+      transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
+    }
+    .hero-logo {
+      position: absolute;
+      top: 5%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: clamp(120px, 18%, 220px);
+      z-index: 10;
+      filter: drop-shadow(0 0 20px rgba(255,255,255,0.6)) drop-shadow(0 0 40px #00bfff44);
+      animation: logoPulse 3s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes logoPulse {
+      0%, 100% { filter: drop-shadow(0 0 15px rgba(255,255,255,0.5)) drop-shadow(0 0 30px #00bfff22); }
+      50% { filter: drop-shadow(0 0 30px rgba(255,255,255,0.8)) drop-shadow(0 0 60px #00bfff55); }
+    }
+
+    /* SVG ZONES */
+    .map-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 16px;
+      z-index: 5;
+    }
+    .map-svg a { text-decoration: none; }
+    .zone-shape {
+      fill: var(--zc);
+      fill-opacity: 0.15;
+      stroke: var(--zc);
+      stroke-width: 2;
+      stroke-opacity: 0.6;
+      cursor: pointer;
+      transition: fill-opacity 0.3s, filter 0.3s;
+      filter: drop-shadow(0 0 4px var(--zc));
+    }
+    .zone-shape:hover {
+      fill-opacity: 0.45;
+      filter: drop-shadow(0 0 12px var(--zc)) drop-shadow(0 0 20px var(--zc));
+    }
+    .zone-text {
+      fill: #ffffff;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-anchor: middle;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .zone-group:hover .zone-text { opacity: 1; }
+    .zone-group { cursor: pointer; }
+
+    /* ZONE OVERLAYS */
+    .map-zone {
+      position: absolute;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+    .map-zone:hover {
+      transform: scale(1.12);
+    }
+    .map-zone .zone-label {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.85);
+      border: 1px solid var(--zone-color);
+      color: #fff;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 13px;
+      letter-spacing: 2px;
+      padding: 4px 12px;
+      border-radius: 4px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      box-shadow: 0 0 10px var(--zone-color);
+    }
+    .map-zone:hover .zone-label { opacity: 1; }
+
+    .map-zone .zone-dot {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: var(--zone-color);
+      opacity: 0.10;
+      border: 2px solid var(--zone-color);
+      transition: opacity 0.3s;
+      animation: zonePulse 2s ease-in-out infinite;
+    }
+    .map-zone:hover .zone-dot { opacity: 0.7; }
+
+    @keyframes zonePulse {
+      0%, 100% { box-shadow: 0 0 0 0 var(--zone-color); }
+      50% { box-shadow: 0 0 0 8px transparent; }
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn-primary {
+      background: var(--blue);
+      color: #000;
+      border: none;
+      padding: 16px 40px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: all 0.3s;
+      box-shadow: 0 0 20px var(--blue-dim);
+    }
+    .btn-primary:hover {
+      box-shadow: 0 0 40px var(--blue-glow);
+      transform: translateY(-2px);
+    }
+    .btn-secondary {
+      background: transparent;
+      color: #fff;
+      border: 1px solid #ffffff33;
+      padding: 16px 40px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    .btn-secondary:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    /* ── STATS ── */
+    .stats {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+      gap: 60px;
+      padding: 40px 60px;
+      border-top: 1px solid #00bfff11;
+      border-bottom: 1px solid #00bfff11;
+      flex-wrap: wrap;
+    }
+    .stat {
+      text-align: center;
+    }
+    .stat-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 52px;
+      color: var(--blue);
+      text-shadow: 0 0 20px var(--blue-glow);
+      letter-spacing: 2px;
+    }
+    .stat-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      color: #666;
+      text-transform: uppercase;
+    }
+
+    /* ── FEATURES ── */
+    .features {
+      position: relative;
+      z-index: 1;
+      padding: 80px 60px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .feature-card {
+      background: var(--dark2);
+      border: 1px solid #00bfff11;
+      border-radius: 12px;
+      padding: 32px;
+      transition: all 0.4s;
+    }
+    .feature-card:hover {
+      border-color: var(--blue-dim);
+      box-shadow: 0 0 30px #00bfff11;
+      transform: translateY(-4px);
+    }
+    .feature-icon {
+      font-size: 32px;
+      margin-bottom: 16px;
+    }
+    .feature-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 24px;
+      letter-spacing: 2px;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+    .feature-text {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.7;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── SOCIALS FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 30px 60px;
+      border-top: 1px solid #00bfff11;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .footer-copy {
+      font-size: 13px;
+      color: #444;
+      letter-spacing: 1px;
+    }
+    .footer-socials {
+      display: flex;
+      gap: 16px;
+    }
+    .social-link {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--dark2);
+      border: 1px solid #00bfff22;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    .social-link:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+      box-shadow: 0 0 15px var(--blue-dim);
+    }
+    .social-link svg { width: 20px; height: 20px; fill: currentColor; }
+
+    /* ── DIVIDER LINE ── */
+    .section-label {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 0 60px;
+      margin-bottom: -40px;
+    }
+    .section-label span {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 5px;
+      color: var(--blue);
+      text-transform: uppercase;
+    }
+
+    /* ── CURSOR ── */
+    * { cursor: none !important; }
+    #cursor {
+      position: fixed;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,191,255,1) 0%, rgba(0,191,255,0.4) 50%, transparent 100%);
+      pointer-events: none;
+      z-index: 99999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.15s ease;
+      filter: blur(6px);
+    }
+    #cursor.hover {
+      transform: translate(-50%, -50%) scale(1.5);
+      background: radial-gradient(circle, rgba(0,191,255,1) 0%, rgba(0,191,255,0.5) 50%, transparent 100%);
+    }
+
+    /* ── ZONE MODAL ── */
+    #zone-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 99990;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+    #zone-overlay.show { display: flex; }
+
+    #zone-modal {
+      background: #0a0a1a;
+      border: 1px solid #00bfff44;
+      border-radius: 16px;
+      padding: 36px 32px;
+      width: 360px;
+      box-shadow: 0 0 60px #00bfff22;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      animation: modalIn 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.92) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    #zone-modal .modal-close {
+      position: absolute;
+      top: 14px; right: 16px;
+      background: transparent;
+      border: none;
+      color: #555;
+      font-size: 20px;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    #zone-modal .modal-close:hover { color: #fff; }
+    #zone-modal .modal-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 26px;
+      letter-spacing: 3px;
+      color: #fff;
+      text-shadow: 0 0 20px #00bfff44;
+    }
+    #zone-modal .modal-sub {
+      font-size: 13px;
+      color: #666;
+      letter-spacing: 1px;
+      margin-top: -8px;
+    }
+    #zone-modal .modal-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      border-radius: 10px;
+      border: 1px solid #00bfff33;
+      background: transparent;
+      color: #fff;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s;
+      width: 100%;
+    }
+    #zone-modal .modal-btn:hover {
+      background: #00bfff11;
+      border-color: #00bfff88;
+      box-shadow: 0 0 20px #00bfff22;
+      color: #00bfff;
+    }
+    #zone-modal .modal-btn .btn-icon { font-size: 20px; }
+    #zone-modal .modal-btn.fix { border-color: #ff880033; }
+    #zone-modal .modal-btn.fix:hover {
+      background: #ff880011;
+      border-color: #ff8800aa;
+      color: #ff8800;
+      box-shadow: 0 0 20px #ff880022;
+    }
+
+    /* ── FIX MODAL ── */
+    #fix-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 99995;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+    #fix-overlay.show { display: flex; }
+    #fix-modal {
+      background: #0a0a1a;
+      border: 1px solid #ff880044;
+      border-radius: 16px;
+      padding: 36px 32px;
+      width: min(500px, 90vw);
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 0 60px #ff880022;
+      position: relative;
+      animation: modalIn 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    #fix-modal .modal-close {
+      position: absolute;
+      top: 14px; right: 16px;
+      background: transparent;
+      border: none;
+      color: #555;
+      font-size: 20px;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    #fix-modal .modal-close:hover { color: #fff; }
+    #fix-modal .fix-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 26px;
+      letter-spacing: 3px;
+      color: #ff8800;
+      margin-bottom: 8px;
+    }
+    #fix-modal .fix-zone {
+      font-size: 13px;
+      color: #666;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    #fix-modal .fix-content {
+      font-size: 14px;
+      color: #aaa;
+      line-height: 1.8;
+      letter-spacing: 0.5px;
+    }
+    .fix-step {
+      font-size: 13px;
+      color: #aaa;
+      line-height: 1.8;
+      margin-bottom: 16px;
+      padding: 14px 16px;
+      background: #ffffff06;
+      border-left: 3px solid #ff880055;
+      border-radius: 0 8px 8px 0;
+    }
+    .fix-step strong { color: #fff; }
+    .fix-warning { color: #ff8800; font-weight: 700; }
+    .fix-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .fix-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      transition: all 0.3s;
+    }
+    .fix-link.discord {
+      background: #5865f211;
+      border: 1px solid #5865f244;
+      color: #5865f2;
+    }
+    .fix-link.discord:hover { background: #5865f222; border-color: #5865f2; }
+    .fix-link.video {
+      background: #00bfff11;
+      border: 1px solid #00bfff44;
+      color: #00bfff;
+    }
+    .fix-link.video:hover { background: #00bfff22; border-color: #00bfff; }
+
+    .fix-checks { margin-bottom: 20px; }
+    .fix-checks-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #666;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .fix-check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #ffffff08;
+      cursor: pointer;
+      font-size: 13px;
+      color: #aaa;
+      line-height: 1.5;
+      transition: color 0.2s;
+    }
+    .fix-check-item:hover { color: #fff; }
+    .fix-checkbox {
+      width: 18px;
+      height: 18px;
+      min-width: 18px;
+      accent-color: #00bfff;
+      cursor: pointer;
+      margin-top: 2px;
+    }
+    .fix-understand-btn {
+      width: 100%;
+      padding: 16px;
+      background: #00bfff22;
+      border: 1px solid #00bfff44;
+      border-radius: 10px;
+      color: #666;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      cursor: not-allowed;
+      transition: all 0.3s;
+    }
+    .fix-understand-btn:not(:disabled) {
+      background: #00bfff;
+      border-color: #00bfff;
+      color: #000;
+      cursor: pointer;
+      box-shadow: 0 0 20px #00bfff44;
+    }
+    .fix-understand-btn:not(:disabled):hover {
+      box-shadow: 0 0 30px #00bfff88;
+      transform: translateY(-1px);
+    }
+
+
+
+    /* ── FILES MODAL ── */
+    #files-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 99998;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+    #files-overlay.show { display: flex; }
+    #files-modal {
+      background: #0a0a1a;
+      border: 1px solid #00bfff44;
+      border-radius: 16px;
+      padding: 36px 32px;
+      width: min(500px, 90vw);
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 0 60px #00bfff22;
+      position: relative;
+      animation: modalIn 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    #files-modal .modal-close {
+      position: absolute;
+      top: 14px; right: 16px;
+      background: transparent;
+      border: none;
+      color: #555;
+      font-size: 20px;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    #files-modal .modal-close:hover { color: #fff; }
+    .files-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 26px;
+      letter-spacing: 3px;
+      color: #00bfff;
+      margin-bottom: 6px;
+    }
+    .files-zone {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: #555;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    
+    .file-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      margin-bottom: 8px;
+      background: #ffffff05;
+      border: 1px solid #00bfff11;
+      border-radius: 8px;
+      gap: 12px;
+    }
+    .file-name {
+      font-family: monospace;
+      font-size: 13px;
+      color: #00bfff;
+      word-break: break-all;
+    }
+    .copy-btn {
+      background: transparent;
+      border: 1px solid #00bfff44;
+      color: #00bfff;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .copy-btn:hover {
+      background: #00bfff22;
+      border-color: #00bfff;
+    }
+
+    .files-content {
+      font-size: 13px;
+      color: #aaa;
+      line-height: 2;
+      letter-spacing: 0.5px;
+      white-space: pre-wrap;
+      background: #ffffff05;
+      border: 1px solid #00bfff11;
+      border-radius: 8px;
+      padding: 16px;
+      font-family: monospace;
+    }
+
+
+    /* ── VIDEOS MODAL ── */
+    #videos-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 99992;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+    #videos-overlay.show { display: flex; }
+    #videos-modal {
+      background: #0a0a1a;
+      border: 1px solid #00bfff44;
+      border-radius: 16px;
+      padding: 36px 32px;
+      width: min(700px, 94vw);
+      max-height: 88vh;
+      overflow-y: auto;
+      box-shadow: 0 0 60px #00bfff22;
+      position: relative;
+      animation: modalIn 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    #video-embed-wrap {
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      border: 1px solid #00bfff22;
+    }
+    .video-item.active {
+      background: #00bfff22;
+      border-color: #00bfff88;
+      color: #00bfff;
+    }
+    .video-item {
+      cursor: pointer;
+    }
+    #videos-modal .modal-close {
+      position: absolute;
+      top: 14px; right: 16px;
+      background: transparent;
+      border: none;
+      color: #555;
+      font-size: 20px;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    #videos-modal .modal-close:hover { color: #fff; }
+    .videos-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 26px;
+      letter-spacing: 3px;
+      color: #00bfff;
+      margin-bottom: 6px;
+    }
+    .videos-zone {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: #555;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .videos-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .video-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      background: #ffffff05;
+      border: 1px solid #00bfff22;
+      border-radius: 10px;
+      text-decoration: none;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+    .video-item:hover {
+      border-color: #00bfff88;
+      box-shadow: 0 0 20px #00bfff22;
+      transform: translateY(-3px);
+    }
+    .video-thumb-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #111;
+      overflow: hidden;
+    }
+    .video-thumb {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s;
+    }
+    .video-item:hover .video-thumb { transform: scale(1.05); }
+    .video-play-icon {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: #fff;
+      background: rgba(0,0,0,0.3);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .video-item:hover .video-play-icon { opacity: 1; }
+    .video-name {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: #ccc;
+      letter-spacing: 0.5px;
+      padding: 0 10px 10px;
+      line-height: 1.4;
+    }
+
+  </style>
+</head>
+<body>
+
+<!-- PRELOADER -->
+<div id="preloader">
+  <div class="pre-logo-wrap">
+    <img class="pre-img-outline" src="https://i.ibb.co/cSYFH6Y1/YBNLogo.png" alt="YBN">
+    <img class="pre-img-fill" src="https://i.ibb.co/cSYFH6Y1/YBNLogo.png" alt="YBN">
+    <div class="pre-glow-left"></div>
+    <div class="pre-glow-right"></div>
+  </div>
+  <p class="pre-title">YBN MILOS</p>
+  <p class="pre-sub">LOADING</p>
+  <div class="pre-dots"><span></span><span></span><span></span></div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+  <div class="bg-image"></div>
+  <div class="bg-grid"></div>
+  <div class="bg-glow"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">
+      <img src="https://i.ibb.co/cSYFH6Y1/YBNLogo.png" alt="YBN">
+    </div>
+    <ul class="nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="cities.html">Cities</a></li>
+      <li><a href="https://discord.com/invite/GJMpY39Q8J" target="_blank">Discord</a></li>
+      <li><a href="https://www.youtube.com/@TheGroveBrothers" target="_blank">YouTube</a></li>
+      <li><a href="https://ybnmilos-mlo-world.tebex.io/category/monthly-subscription" target="_blank">Subscription</a></li>
+    </ul>
+    <a href="cities.html" class="nav-cta">Enter Store</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="map-wrap">
+      <img class="map-img" src="https://i.ibb.co/MkhSCRWt/Milos-Map3.png" alt="Map">
+      <img src="https://i.ibb.co/cSYFH6Y1/YBNLogo.png" alt="YBN Milos" class="hero-logo">
+
+      <!-- SVG ZONES -->
+      <svg class="map-svg" viewBox="0 0 1262 1092" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+
+        <!-- SOUTHSIDE -->
+        <g class="zone-group">
+          <polygon class="zone-shape" style="--zc:#0088cc"
+            points="239,445 221,454 197,479 179,504 183,523 198,533 228,537 261,533 274,521 282,501 284,469 279,454"/>
+          <text class="zone-text" x="228" y="495">Southside</text>
+        </g>
+
+        <!-- DOWNTOWN -->
+        <g class="zone-group">
+          <polygon class="zone-shape" style="--zc:#0088cc"
+            points="287,427 293,524 348,526 382,526 406,528 417,509 422,485 422,468 407,454 411,425 416,409 410,377 375,321 338,344 346,366 348,401 316,412"/>
+          <text class="zone-text" x="370" y="470">Downtown</text>
+        </g>
+
+        <!-- VESPUCCI -->
+        <g class="zone-group">
+          <polygon class="zone-shape" style="--zc:#0088cc"
+            points="194,301 231,354 236,377 261,395 287,392 296,381 277,349 294,336 308,329 294,307 243,276 230,272"/>
+          <text class="zone-text" x="250" y="340">Vespucci</text>
+        </g>
+
+        <!-- EAST LOS SANTOS -->
+        <g class="zone-group">
+          <polygon class="zone-shape" style="--zc:#0088cc"
+            points="146,548 219,558 225,572 226,593 238,613 261,606 290,604 307,595 328,601 337,607 353,609 367,607 387,605 394,616 395,643 376,669 346,666 314,685 280,682 260,677 235,665 208,664 184,660 168,656 146,655 141,642 132,612 128,552 136,546"/>
+          <text class="zone-text" x="262" y="625">East Los Santos</text>
+        </g>
+
+        <!-- VINEWOOD -->
+        <g class="zone-group">
+          <polygon class="zone-shape" style="--zc:#0088cc"
+            points="505,430 495,445 484,465 491,482 499,490 508,500 513,518 508,539 522,560 525,570 555,567 579,562 584,532 582,508 541,484 531,444 528,432"/>
+          <text class="zone-text" x="535" y="510">Vinewood</text>
+        </g>
+
+        <!-- BALTIMORE/PHILLY -->
+        <g class="zone-group">
+          <polygon class="zone-shape" style="--zc:#0088cc"
+            points="810,613 842,619 852,633 862,654 860,673 849,688 835,694 836,709 849,728 867,743 897,755 902,772 881,785 842,791 813,786 788,773 766,759 743,736 756,698 777,673 800,656 808,652"/>
+          <text class="zone-text" x="820" y="720">Baltimore/Philly</text>
+        </g>
+
+        <!-- PALETO -->
+        <g class="zone-group">
+          <polygon class="zone-shape" style="--zc:#0088cc"
+            points="1053,406 1109,399 1164,425 1181,468 1164,497 1145,513 1132,473 1104,448"/>
+          <text class="zone-text" x="1120" y="460">Paleto</text>
+        </g>
+
+      </svg>
+    </div>
+
+    <div class="hero-buttons">
+      <a href="https://ybnmilos-mlo-world.tebex.io" target="_blank" class="btn-primary">Select Your City</a>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-number">8000+</div>
+      <div class="stat-label">Customers</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">6+</div>
+      <div class="stat-label">Cities</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">100+</div>
+      <div class="stat-label">MLOs</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">24/7</div>
+      <div class="stat-label">Support</div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="section-label" style="margin-top:60px; margin-bottom: 20px;">
+    <span>Why Choose Us</span>
+  </div>
+  <div class="features">
+    <div class="feature-card">
+      <div class="feature-icon">🗺️</div>
+      <div class="feature-title">Premium MLOs</div>
+      <div class="feature-text">Hand-crafted map modifications with zero render issues or lag. Built for performance on any server.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🏙️</div>
+      <div class="feature-title">Multiple Cities</div>
+      <div class="feature-text">Detroit, Chicago, Philly, Baltimore, Baton Rouge, Los Santos and more. Every city with unique character.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <div class="feature-title">Easy Install</div>
+      <div class="feature-text">Simple 3-step installation via Keymaster. Download, drag, start. Live in minutes.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔧</div>
+      <div class="feature-title">Full Support</div>
+      <div class="feature-text">Dedicated support team available via Discord. Open a ticket and get answered fast.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎮</div>
+      <div class="feature-title">Test Server</div>
+      <div class="feature-text">Try before you buy on our live FiveM test server. See every MLO in action before purchasing.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">💰</div>
+      <div class="feature-title">Best Prices</div>
+      <div class="feature-text">Weekly discounts, bundle deals, and a monthly subscription to get access to everything.</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-copy">© 2025 YBN Milos MLO World. All rights reserved.</div>
+    <div class="footer-socials">
+      <!-- Discord -->
+      <a href="https://discord.com/invite/GJMpY39Q8J" target="_blank" class="social-link" title="Discord">
+        <svg viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.031.052a19.896 19.896 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+      </a>
+      <!-- YouTube -->
+      <a href="https://www.youtube.com/@TheGroveBrothers" target="_blank" class="social-link" title="YouTube">
+        <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+      </a>
+      <!-- FiveM -->
+      <a href="https://servers.fivem.net/servers/detail/mp8y69" target="_blank" class="social-link" title="FiveM">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+      </a>
+    </div>
+  </footer>
+</div>
+
+<script>
+setTimeout(function() { document.getElementById('main').classList.add('loaded'); }, 1500);
+setTimeout(function() {
+  var pre = document.getElementById('preloader');
+  pre.classList.add('hide');
+  setTimeout(function() { pre.style.display = 'none'; }, 1800);
+}, 3000);
+</script>
+
+
+<!-- CURSOR -->
+<div id="cursor"></div>
+<script>
+var cursor = document.getElementById('cursor');
+document.addEventListener('mousemove', function(e) {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+});
+document.querySelectorAll('a, button, .map-zone, .zone-group, .city-card, .social-link, .nav-cta').forEach(function(el) {
+  el.addEventListener('mouseenter', function() { cursor.classList.add('hover'); });
+  el.addEventListener('mouseleave', function() { cursor.classList.remove('hover'); });
+});
+</script>
+
+<!-- ZONE MODAL -->
+<div id="zone-overlay">
+  <div id="zone-modal">
+    <button class="modal-close" onclick="closeZoneModal()">✕</button>
+    <div class="modal-title" id="modal-city-name">CITY NAME</div>
+    <div class="modal-sub">What would you like to do?</div>
+    <button class="modal-btn visit" onclick="openVideosModal()">
+      <span class="btn-icon">🎬</span> Showcase MLO
+    </button>
+    <button class="modal-btn fix" onclick="openFixModal()">
+      <span class="btn-icon">🔧</span> Fix Conflicting Map
+    </button>
+  </div>
+</div>
+
+<!-- FIX MODAL -->
+<div id="fix-overlay">
+  <div id="fix-modal">
+    <button class="modal-close" onclick="closeFixModal()">✕</button>
+    <div class="fix-title">FIX CONFLICTING MAP</div>
+    <div class="fix-zone" id="fix-zone-name"></div>
+    <div class="fix-content">
+      <div class="fix-step">
+        <span class="fix-warning">⚠️ MUST REMEMBER!</span> If you are using WinSCP or FileZilla, 100% it won't search the files correctly! What we suggest is to drag your whole <strong>RESOURCE FOLDER</strong> (not [maps], not [streamable]) to your Desktop so you can use your File Explorer search engine.
+      </div>
+      <div class="fix-step">
+        If you refuse to drag your whole resource folder, start taking <strong>5 by 5 MLOs</strong> out of your server until the issue stops. As soon as it stops, find the MLO that's conflicting with it and keep the process going from below!
+      </div>
+      <div class="fix-step">
+        When searching the files named below, make sure it's the <strong>resource folder</strong> and delete from the other creator's folder. Don't worry about breaking their part of the map. If by any chance that happens, make a ticket in our Discord.
+      </div>
+      <div class="fix-links">
+        <a href="https://discord.com/invite/GJMpY39Q8J" target="_blank" class="fix-link discord">💬 Discord Support</a>
+        <a href="https://streamable.com/wlsupe" target="_blank" class="fix-link video">▶ Video: How to Search Files</a>
+      </div>
+
+      <div class="fix-checks">
+        <p class="fix-checks-title">Please confirm you understand before continuing:</p>
+        <label class="fix-check-item">
+          <input type="checkbox" class="fix-checkbox" onchange="checkAll()">
+          <span>I agree with the instructions listed above</span>
+        </label>
+      </div>
+
+      <button class="fix-understand-btn" id="fix-understand-btn" disabled onclick="openFilesModal()">
+        I UNDERSTAND
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+var zoneData = {
+  'Southside': {
+    videos: [
+      { name: 'Southside MLO #1', url: 'https://www.youtube.com/watch?v=FbCSYRm6mow' },
+      { name: 'Southside MLO #2', url: 'https://youtu.be/0bhT4pMmRL4' },
+      { name: 'Southside MLO #3', url: 'https://youtu.be/MMOTmFimgf0' },
+      { name: 'Southside MLO #4', url: 'https://youtu.be/3ncWSLG-mO4' },
+      { name: 'Southside MLO #5', url: 'https://youtu.be/ua-0opjbr7U' },
+      { name: 'Southside MLO #6', url: 'https://youtu.be/FpJnMYpXiy0' },
+      { name: 'Southside MLO #7', url: 'https://youtu.be/n5goysi3LJY' },
+      { name: 'Southside MLO #8', url: 'https://youtu.be/uNaVcopduc8' },
+      { name: 'Southside MLO #9', url: 'https://youtu.be/qrbjzS171p0' },
+      { name: 'Southside MLO #10', url: 'https://youtu.be/580jwezPG_g' },
+      { name: 'Southside MLO #11', url: 'https://youtu.be/3_SC36Q1eSE' },
+      { name: 'Southside MLO #12', url: 'https://youtu.be/iYYm0EWPGgU' },
+      { name: 'Southside MLO #13', url: 'https://youtu.be/iZl3rPJEW2o' },
+      { name: 'Southside MLO #14', url: 'https://youtu.be/Vcmjd2qwG4g' },
+      { name: 'Southside MLO #15', url: 'https://youtu.be/PM_zdlQUoo8' },
+      { name: 'Southside MLO #16', url: 'https://youtu.be/5C_sPe4ilhs' },
+      { name: 'Southside MLO #17', url: 'https://youtu.be/MoS_PQSdnFY' },
+      { name: 'Southside MLO #18', url: 'https://youtu.be/ayizgh34onk' },
+      { name: 'Southside MLO #19', url: 'https://youtu.be/MHgU6XPKx3A' },
+      { name: 'Southside MLO #20', url: 'https://youtu.be/YuRUfQ_MuvY' },
+      { name: 'Southside MLO #21', url: 'https://youtu.be/N-hVY9UK7DM' },
+      { name: 'Southside MLO #22', url: 'https://youtu.be/0FYMPY0iFhE' },
+      { name: 'Southside MLO #23', url: 'https://youtu.be/zizqR1YcR6c' },
+      { name: 'Southside MLO #24', url: 'https://youtu.be/0EOXbPq1CIE' }
+    ],
+    files: ['lr_sc1_occl_00.ymap', 'lr_sc1_occl_01.ymap', 'lr_sc1_occl_02.ymap', 'lr_sc1_occl_03.ymap']
+  },
+  'Downtown': {
+    videos: [
+      { name: 'Downtown MLO #1', url: 'https://youtu.be/KeGu_M0qBBQ' },
+      { name: 'Downtown MLO #2', url: 'https://youtu.be/Ml8tQYuWh9M' },
+      { name: 'Downtown MLO #3', url: 'https://youtu.be/Vvd80W1mCIM' },
+      { name: 'Downtown MLO #4', url: 'https://youtu.be/WEQ4CyoCikM' },
+      { name: 'Downtown MLO #5', url: 'https://youtu.be/lFtYjGJkuLk' },
+      { name: 'Downtown MLO #6', url: 'https://youtu.be/YSXUbeLnwRM' },
+      { name: 'Downtown MLO #7', url: 'https://youtu.be/1X1NwjALHhI' }
+    ],
+    files: ['apa_ss1_occl_00.ymap', 'apa_ss1_occl_01.ymap', 'hei_kt1_occl_02.ymap', 'hei_sm_occl_00.ymap', 'hei_sm_occl_02.ymap', 'hei_sm_occl_03.ymap', 'vb_occl_00.ymap', 'apa_ss1_occl_02.ymap', 'apa_ss1_occl_03.ymap', 'ch1_far_occl_00.ymap', 'hei_bh1_occl_00.ymap', 'hei_bh1_occl_02.ymap', 'hei_bh1_occl_04.ymap', 'hei_bh1_occl_05.ymap', 'hei_dt1_occl_01.ymap', 'hei_dt1_occl_02.ymap', 'hei_dt1_occl_03.ymap', 'hei_dt1_occl_04.ymap', 'hei_dt1_occl_06.ymap', 'hei_dt1_occl_07.ymap', 'hei_hw1_occl_00.ymap', 'hei_hw1_occl_01.ymap']
+  },
+  'Vespucci': {
+    videos: [
+      { name: 'Vespucci MLO #1', url: 'https://youtu.be/Lh8vWM_i37s' },
+      { name: 'Vespucci MLO #2', url: 'https://youtu.be/BHOvo0qkWMU' },
+      { name: 'Vespucci MLO #3', url: 'https://youtu.be/aJt0JvS56z4' },
+      { name: 'Vespucci MLO #4', url: 'https://youtu.be/K0zML8S2W2Q' },
+      { name: 'Vespucci MLO #5', url: 'https://youtu.be/uEjY3KwmVv0' },
+      { name: 'Vespucci MLO #6', url: 'https://youtu.be/Yv1hOUS8ZBE' },
+      { name: 'Vespucci MLO #7', url: 'https://youtu.be/qs0NWvQJvhA' }
+    ],
+    files: ['vb_occl_00.ymap', 'vb_occl_01.ymap']
+  },
+  'East Los Santos': {
+    videos: [
+      { name: 'East LS MLO #1', url: 'https://youtu.be/JjJ5KiggdlA' },
+      { name: 'East LS MLO #2', url: 'https://youtu.be/y-8kX6PkaQI' },
+      { name: 'East LS MLO #3', url: 'https://youtu.be/sHV7h6kBhFs' },
+      { name: 'East LS MLO #4', url: 'https://youtu.be/woUNOury81Q' },
+      { name: 'East LS MLO #5', url: 'https://youtu.be/uUEQLMD62Ek' }
+    ],
+    files: ['bkr_id1_occl_00.ymap', 'bkr_id1_occl_01.ymap', 'bkr_id1_occl_02.ymap', 'bkr_id1_occl_03.ymap']
+  },
+  'Vinewood': {
+    videos: [
+      { name: 'Vinewood MLO #1', url: 'https://www.youtube.com/watch?v=imWTxjLhF94' },
+      { name: 'Vinewood MLO #2', url: 'https://www.youtube.com/watch?v=aQIwYvq9jpM' }
+    ],
+    files: ['apa_ch2_occl_02.ymap', 'apa_ch2_occl_03.ymap', 'apa_ch2_occl_04.ymap', 'apa_ch2_occl_05.ymap', 'apa_ch2_occl_06.ymap', 'ch1_far_occl_00.ymap']
+  },
+  'Baltimore/Philly': {
+    videos: [
+      { name: 'Baltimore/Philly MLO #1', url: 'https://youtu.be/WgQqAChJUnY' },
+      { name: 'Baltimore/Philly MLO #2', url: 'https://youtu.be/IiF2d3Jzuqg' },
+      { name: 'Baltimore/Philly MLO #3', url: 'https://youtu.be/Ksz8EYM71Ao' }
+    ],
+    files: ['cs4_occl_01.ymap', 'cs4_occl_03.ymap', 'cs4_occl_04.ymap', 'cs4_occl_05.ymap', 'cs4_occl_06.ymap']
+  },
+  'Paleto': {
+    videos: [
+      { name: 'Paleto MLO #1', url: 'https://youtu.be/qPXzf-O6O84' }
+    ],
+    files: ['cs1_far_occl_00.ymap', 'cs1_occl_07.ymap', 'cs1_occl_09.ymap', 'cs1_occl_10.ymap', 'cs1_occl_11.ymap']
+  }
+};
+
+var currentZone = '';
+
+// Zone centers as percentages of the image (x%, y%)
+var zoneCenters = {
+  'Southside':       { x: 19, y: 52 },
+  'Downtown':        { x: 32, y: 48 },
+  'Vespucci':        { x: 22, y: 34 },
+  'East Los Santos': { x: 22, y: 65 },
+  'Vinewood':        { x: 43, y: 57 },
+  'Baltimore/Philly':{ x: 67, y: 72 },
+  'Paleto':          { x: 87, y: 47 }
+};
+
+function openZoneModal(zoneName) {
+  currentZone = zoneName;
+  document.getElementById('modal-city-name').textContent = zoneName;
+
+  // Zoom into the zone keeping it centered in the viewport
+  var center = zoneCenters[zoneName];
+  if (center) {
+    var img = document.querySelector('.map-img');
+    var svg = document.querySelector('.map-svg');
+    var scale = 2.2;
+    var tx = (50 - center.x) / scale * 1.5;
+    var ty = (50 - center.y) / scale * 1.5;
+    img.style.transformOrigin = center.x + '% ' + center.y + '%';
+    svg.style.transformOrigin = center.x + '% ' + center.y + '%';
+    img.style.transform = 'scale(' + scale + ') translate(' + tx + '%, ' + ty + '%)';
+    svg.style.transform = 'scale(' + scale + ') translate(' + tx + '%, ' + ty + '%)';
+  }
+
+  // Open popup after zoom
+  setTimeout(function() {
+    document.getElementById('zone-overlay').classList.add('show');
+  }, 500);
+}
+
+function resetMapZoom() {
+  var img = document.querySelector('.map-img');
+  var svg = document.querySelector('.map-svg');
+  if (img) img.style.transform = '';
+  if (svg) svg.style.transform = '';
+}
+
+function closeZoneModal() {
+  document.getElementById('zone-overlay').classList.remove('show');
+  resetMapZoom();
+}
+
+function getYoutubeId(url) {
+  var match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&?/]+)/);
+  return match ? match[1] : null;
+}
+
+function openVideosModal() {
+  closeZoneModal();
+  document.getElementById('videos-zone-name').textContent = currentZone;
+  var videos = zoneData[currentZone].videos;
+  var list = document.getElementById('videos-list');
+  list.innerHTML = '';
+  videos.forEach(function(video) {
+    var id = getYoutubeId(video.url);
+    var thumb = id ? 'https://img.youtube.com/vi/' + id + '/mqdefault.jpg' : '';
+    var item = document.createElement('a');
+    item.className = 'video-item';
+    item.href = video.url;
+    item.target = '_blank';
+    item.innerHTML =
+      '<div class="video-thumb-wrap">' +
+        (thumb ? '<img class="video-thumb" src="' + thumb + '" alt="">' : '') +
+        '<div class="video-play-icon">▶</div>' +
+      '</div>' +
+      '<div class="video-name">' + video.name + '</div>';
+    list.appendChild(item);
+  });
+  document.getElementById('videos-overlay').classList.add('show');
+}
+
+function closeVideosModal() {
+  document.getElementById('videos-overlay').classList.remove('show');
+}
+
+function openFixModal() {
+  closeZoneModal();
+  document.getElementById('fix-zone-name').textContent = currentZone;
+  document.getElementById('fix-overlay').classList.add('show');
+}
+
+function closeFixModal() {
+  document.getElementById('fix-overlay').classList.remove('show');
+  document.querySelectorAll('.fix-checkbox').forEach(function(cb) { cb.checked = false; });
+  document.getElementById('fix-understand-btn').disabled = true;
+}
+
+function openFilesModal() {
+  closeFixModal();
+  document.getElementById('files-zone-name').textContent = currentZone;
+  var files = zoneData[currentZone].files;
+  var container = document.getElementById('files-content-text');
+  container.innerHTML = '';
+  files.forEach(function(file) {
+    var row = document.createElement('div');
+    row.className = 'file-row';
+    row.innerHTML = '<span class="file-name">' + file + '</span><button class="copy-btn" onclick="copyFile(this, \'' + file.replace(/'/g, "\\'") + '\')">COPY</button>';
+    container.appendChild(row);
+  });
+  document.getElementById('files-overlay').classList.add('show');
+}
+
+function copyFile(btn, text) {
+  navigator.clipboard.writeText(text).then(function() {
+    btn.textContent = 'COPIED!';
+    btn.style.background = '#00bfff';
+    btn.style.color = '#000';
+    setTimeout(function() {
+      btn.textContent = 'COPY';
+      btn.style.background = '';
+      btn.style.color = '';
+    }, 2000);
+  });
+}
+
+function closeFilesModal() {
+  document.getElementById('files-overlay').classList.remove('show');
+}
+
+function checkAll() {
+  var boxes = document.querySelectorAll('.fix-checkbox');
+  var allChecked = Array.from(boxes).every(function(cb) { return cb.checked; });
+  document.getElementById('fix-understand-btn').disabled = !allChecked;
+}
+
+// Close on overlay click
+document.addEventListener('DOMContentLoaded', function() {
+  ['zone-overlay','fix-overlay','files-overlay','videos-overlay'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.addEventListener('click', function(e) {
+      if (e.target === this) {
+        this.classList.remove('show');
+        resetMapZoom();
+      }
+    });
+  });
+  document.querySelectorAll('.zone-group').forEach(function(zone) {
+    zone.addEventListener('click', function() {
+      var text = this.querySelector('.zone-text');
+      if (text) openZoneModal(text.textContent.trim());
+    });
+  });
+});
+</script>
+
+
+<!-- FILES MODAL -->
+<div id="files-overlay">
+  <div id="files-modal">
+    <button class="modal-close" onclick="closeFilesModal()">✕</button>
+    <div class="files-title">🗂️ FILES TO DELETE</div>
+    <div class="files-zone" id="files-zone-name"></div>
+    <div class="files-content" id="files-content-text">INSERT FILES FOR THIS ZONE</div>
+  </div>
+</div>
+
+
+<!-- VIDEOS MODAL -->
+<div id="videos-overlay">
+  <div id="videos-modal">
+    <button class="modal-close" onclick="closeVideosModal()">✕</button>
+    <div class="videos-title">🎬 SHOWCASE MLO</div>
+    <div class="videos-zone" id="videos-zone-name"></div>
+    <div class="videos-list" id="videos-list"></div>
+  </div>
+</div>
+
+</body>
+</html>
