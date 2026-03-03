@@ -92,6 +92,31 @@
     .zone-group:hover .zone-text { opacity:1; }
     .zone-group { cursor:pointer; }
 
+    /* SELECT CITY BUTTON */
+    .select-city-wrap {
+      position:relative; z-index:1;
+      display:flex; justify-content:center;
+      padding:28px 0 10px;
+    }
+    .select-city-btn {
+      display:flex; align-items:center; justify-content:center; gap:10px;
+      padding:18px 60px;
+      font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:5px; text-transform:uppercase;
+      color:#000;
+      background:var(--blue);
+      border:none;
+      border-radius:6px;
+      text-decoration:none;
+      transition:all .3s;
+      box-shadow:0 0 30px #00bfff55, inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+    .select-city-btn:hover {
+      background:#00d9ff;
+      box-shadow:0 0 60px #00bfffaa;
+      transform:translateY(-2px);
+    }
+    .select-city-icon { display:none; }
+
     /* STATS */
     .stats { position:relative; z-index:1; display:flex; justify-content:center; gap:60px; padding:36px 60px; border-top:1px solid #00bfff11; border-bottom:1px solid #00bfff11; flex-wrap:wrap; }
     .stat { text-align:center; }
@@ -402,7 +427,6 @@
     <div class="nav-logo"><img src="https://i.ibb.co/cSYFH6Y1/YBNLogo.png" alt="YBN"></div>
     <ul class="nav-links">
       <li><a href="#">Home</a></li>
-      <li><a href="cities.html">Cities</a></li>
       <li><a href="https://discord.com/invite/GJMpY39Q8J" target="_blank">Discord</a></li>
       <li><a href="https://www.youtube.com/@TheGroveBrothers" target="_blank">YouTube</a></li>
       <li><a href="https://ybnmilos-mlo-world.tebex.io/category/monthly-subscription" target="_blank">Subscription</a></li>
@@ -447,6 +471,14 @@
       </svg>
     </div>
   </section>
+
+  <!-- SELECT CITY BUTTON -->
+  <div class="select-city-wrap">
+    <a href="https://ybnmilos-mlo-world.tebex.io/" target="_blank" class="select-city-btn">
+      <span class="select-city-icon">🗺️</span>
+      SELECT YOUR CITY
+    </a>
+  </div>
 
   <!-- STATS -->
   <div class="stats">
@@ -553,7 +585,7 @@
     <div class="fix-step">When searching the files named below, make sure it's the <strong>resource folder</strong> and delete from the other creator's folder.</div>
     <div class="fix-links">
       <a href="https://discord.com/invite/GJMpY39Q8J" target="_blank" class="fix-link discord">💬 Discord Support</a>
-      <a href="https://streamable.com/wlsupe" target="_blank" class="fix-link video">▶ Video: How to Search Files</a>
+      <a href="https://youtu.be/Wr2J7XzEdPY" target="_blank" class="fix-link video">▶ Video: How to Search Files</a>
     </div>
     <div class="fix-checks">
       <p class="fix-checks-title">Confirm you understand before continuing:</p>
