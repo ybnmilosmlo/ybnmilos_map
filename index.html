@@ -318,6 +318,7 @@
     .review-date { font-size:11px; color:#444; }
     .review-stars { display:flex; gap:2px; margin-bottom:8px; }
     .review-text { font-size:13px; color:#777; line-height:1.6; letter-spacing:.3px; }
+    .review-avatar { width:24px; height:24px; border-radius:50%; object-fit:cover; border:1px solid #5865f244; }
     .no-reviews { text-align:center; padding:40px 20px; color:#444; font-size:13px; letter-spacing:1px; }
 
     /* SUBMIT REVIEW */
@@ -355,6 +356,139 @@
     }
     .submit-btn:hover { box-shadow:0 0 24px var(--blue-glow); transform:translateY(-1px); }
     .submit-btn:disabled { background:#222; color:#555; cursor:not-allowed; transform:none; box-shadow:none; }
+
+    /* DISCORD LOGIN */
+    .discord-login-desc {
+      font-size:12px; color:#555; letter-spacing:.5px; margin-bottom:14px; line-height:1.5;
+    }
+    .discord-login-btn {
+      width:100%; padding:13px;
+      background:#5865f2; border:none; border-radius:8px;
+      font-family:'Rajdhani',sans-serif; font-size:14px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
+      color:#fff; cursor:pointer; transition:all .3s;
+      display:flex; align-items:center; justify-content:center; gap:10px;
+    }
+    .discord-login-btn:hover { background:#4752c4; box-shadow:0 0 24px #5865f255; transform:translateY(-1px); }
+    .discord-user-bar {
+      display:flex; align-items:center; gap:10px;
+      padding:10px 12px;
+      background:#5865f211; border:1px solid #5865f233; border-radius:8px;
+    }
+    .discord-avatar {
+      width:34px; height:34px; border-radius:50%; border:2px solid #5865f2; object-fit:cover;
+    }
+    .discord-username {
+      flex:1; font-size:13px; font-weight:700; color:#fff; letter-spacing:.5px;
+    }
+    .discord-logout-btn {
+      background:transparent; border:1px solid #ffffff22; color:#666;
+      font-family:'Rajdhani',sans-serif; font-size:11px; font-weight:700; letter-spacing:1px;
+      padding:4px 10px; border-radius:5px; cursor:pointer; transition:all .2s;
+    }
+    .discord-logout-btn:hover { border-color:#ff4444; color:#ff4444; }
+
+    /* ══════════════════════════════════════════
+       UPDATES SLIDE-UP PANEL
+    ══════════════════════════════════════════ */
+    #updates-trigger {
+      position: fixed;
+      bottom: 0; left: 40px;
+      z-index: 500;
+      display: flex; align-items: center; gap: 12px;
+      padding: 18px 48px;
+      background: var(--blue);
+      border: none;
+      border-radius: 8px 8px 0 0;
+      color: #000;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px; letter-spacing: 5px; text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 0 30px #00bfff55, inset 0 1px 0 rgba(255,255,255,0.15);
+      transition: background .2s, box-shadow .2s, transform .15s;
+    }
+    #updates-trigger:hover {
+      background: #00d9ff;
+      box-shadow: 0 0 60px #00bfffaa;
+    }
+    #updates-trigger .upd-arrow {
+      width: 0; height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-bottom: 8px solid #000;
+      transition: transform .35s cubic-bezier(.4,0,.2,1);
+    }
+    #updates-trigger.open .upd-arrow { transform: rotate(180deg); }
+
+    #updates-panel {
+      position: fixed;
+      bottom: 62px; left: 40px;
+      width: 480px;
+      z-index: 499;
+      background: var(--dark2);
+      border: 1px solid #00bfff44;
+      border-radius: 8px 8px 0 0;
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height .42s cubic-bezier(.4,0,.2,1), opacity .3s;
+    }
+    #updates-panel.open { max-height: 600px; opacity: 1; }
+
+    .upd-panel-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 20px;
+      border-bottom: 1px solid #00bfff11;
+      background: #07071599;
+    }
+    .upd-panel-header span {
+      font-size: 11px; font-weight: 700; letter-spacing: 3px; color: #00bfff88; text-transform: uppercase;
+    }
+    .upd-pulse {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--blue); box-shadow: 0 0 6px var(--blue);
+      animation: dot 1.4s infinite; flex-shrink: 0;
+    }
+
+    .upd-list { overflow-y: auto; max-height: 480px; }
+    .upd-list::-webkit-scrollbar { width: 3px; }
+    .upd-list::-webkit-scrollbar-thumb { background: #00bfff44; border-radius: 2px; }
+
+    .upd-item {
+      padding: 18px 20px; border-bottom: 1px solid #00bfff08; transition: background .2s;
+    }
+    .upd-item:last-child { border-bottom: none; }
+    .upd-item:hover { background: #00bfff08; }
+    .upd-item-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .upd-tag { font-size: 11px; font-weight: 700; letter-spacing: 2px; color: var(--blue); text-transform: uppercase; }
+    .upd-badge { background: var(--blue); color: #000; font-size: 9px; font-weight: 700; letter-spacing: 1px; padding: 2px 6px; text-transform: uppercase; }
+    .upd-date { font-size: 11px; color: #333; margin-left: auto; }
+    .upd-title { font-size: 17px; font-weight: 600; color: #ddd; letter-spacing: .5px; margin-bottom: 4px; }
+    .upd-desc { font-size: 13px; color: #555; line-height: 1.5; }
+
+    .upd-add {
+      display: flex; gap: 8px; padding: 12px 16px;
+      border-top: 1px solid #00bfff11; background: #07071599;
+    }
+    .upd-add input {
+      flex: 1; background: var(--dark); border: 1px solid #00bfff22; border-radius: 5px;
+      color: #ccc; font-family: 'Rajdhani', sans-serif; font-size: 14px;
+      padding: 9px 12px; outline: none; transition: border-color .2s;
+    }
+    .upd-add input::placeholder { color: #333; }
+    .upd-add input:focus { border-color: #00bfff66; }
+    .upd-add button {
+      background: var(--blue); border: none; border-radius: 5px;
+      color: #000; font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 2px;
+      padding: 9px 18px; cursor: pointer; transition: opacity .2s;
+    }
+    .upd-add button:hover { opacity: .8; }
+
+    .upd-item-link {
+      display: block; text-decoration: none;
+      cursor: pointer;
+      border-left: 2px solid var(--blue) !important;
+    }
+    .upd-item-link:hover { background: #00bfff15 !important; border-left-color: #00d9ff !important; }
 
     /* FIX MODAL */
     #fix-overlay { position:fixed; inset:0; background:rgba(0,0,0,.85); z-index:99995; display:none; align-items:center; justify-content:center; backdrop-filter:blur(4px); }
@@ -548,18 +682,37 @@
             </div>
             <div id="reviews-list"><div class="no-reviews">No reviews yet. Be the first!</div></div>
           </div>
-          <div class="submit-review">
-            <div class="submit-title">Leave a Review</div>
-            <input class="review-name-input" id="review-name" type="text" placeholder="Your name / server name...">
-            <div class="star-picker" id="star-picker">
-              <span class="star-pick" data-v="1">★</span>
-              <span class="star-pick" data-v="2">★</span>
-              <span class="star-pick" data-v="3">★</span>
-              <span class="star-pick" data-v="4">★</span>
-              <span class="star-pick" data-v="5">★</span>
+          <div class="submit-review" id="submit-review-section">
+
+            <!-- NOT LOGGED IN: show Discord login button -->
+            <div id="discord-login-prompt">
+              <div class="submit-title">Leave a Review</div>
+              <p class="discord-login-desc">Sign in with Discord to leave a review</p>
+              <button class="discord-login-btn" onclick="discordLogin()">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.031.052a19.896 19.896 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+                Login with Discord
+              </button>
             </div>
-            <textarea class="review-textarea" id="review-text" placeholder="Share your experience with this zone's MLOs..."></textarea>
-            <button class="submit-btn" id="submit-review-btn" onclick="submitReview()">Submit Review</button>
+
+            <!-- LOGGED IN: show user info + review form -->
+            <div id="discord-review-form" style="display:none;">
+              <div class="discord-user-bar">
+                <img id="discord-avatar" class="discord-avatar" src="" alt="">
+                <span id="discord-username" class="discord-username"></span>
+                <button class="discord-logout-btn" onclick="discordLogout()">Logout</button>
+              </div>
+              <div class="submit-title" style="margin-top:12px;">Leave a Review</div>
+              <div class="star-picker" id="star-picker">
+                <span class="star-pick" data-v="1">★</span>
+                <span class="star-pick" data-v="2">★</span>
+                <span class="star-pick" data-v="3">★</span>
+                <span class="star-pick" data-v="4">★</span>
+                <span class="star-pick" data-v="5">★</span>
+              </div>
+              <textarea class="review-textarea" id="review-text" placeholder="Share your experience with this zone's MLOs..."></textarea>
+              <button class="submit-btn" id="submit-review-btn" onclick="submitReview()">Submit Review</button>
+            </div>
+
           </div>
         </div>
       </div>
@@ -699,9 +852,49 @@ var zoneData = {
   }
 };
 
-// Per-zone reviews stored in memory
+// Shared reviews shown across all zones
+var sharedReviews = [
+  { name:'Static187Boss', stars:5, text:'i brought that watts as it dropped and not even a problem everything just perfect, you the goat my guy, keep up the good work 💯🔥', date:'Jan 1, 2025' },
+  { name:'LDx4', stars:5, text:'10/10 watts maps hard af', date:'Jan 3, 2025' },
+  { name:'157YG🦅', stars:5, text:'💯💯💯 on the mall and my custom changes ima drop pics wen we release it. Hood package, Oxnard, Jefferson ybn mall, Los colinas all in one server goes crazy 🔥🔥🔥🔥🔥', date:'Jan 5, 2025' },
+  { name:'ᒐᥙᥒᥲ🦋 ᙖo⳽⳽ᑲɩtᥴᖾᖾ', stars:5, text:'Hands down best customer service we have had with any creators, We have a few things from this creator and he has helped us work through any issues we have had. Very quick at fixing anything that comes about. Def go grab you some of their stuff!', date:'Jan 8, 2025' },
+  { name:'TFFT CHIEF ICE', stars:5, text:'Best ymaps ever been supporting the gang for over 2years keep going hawmies kick it far 😤', date:'Jan 10, 2025' },
+  { name:'Babo', stars:5, text:'great support love how these chicago mlos work with my other hood mlos no crash/lags my first time here and it wont be my last 💯 !!!!!!!!!!!', date:'Jan 12, 2025' },
+  { name:'TJ 胡达维尔', stars:5, text:'Loving the Chicago hoods fit perfect with my other hoods nearby thanks to YBNMilos helping with the conflicts having support was everything got help with in a few minutes my problems was gone !!! 💪🏾🔥💯', date:'Jan 14, 2025' },
+  { name:'ᒐᥙᥒᥲ🦋 ᙖo⳽⳽ᑲɩtᥴᖾᖾ', stars:5, text:'YBNMilos always comes through with the best support!!!', date:'Jan 16, 2025' },
+  { name:'Bagz734', stars:5, text:'SHIT THIS MAP A1 FEW BUGS HE FIXED QUICK & IF YOUR TEXTURES IS OFF ON FORUM! TURN UP THE GAME BASE!', date:'Jan 18, 2025' },
+  { name:'LDx4', stars:5, text:'EAST LOS SANTOS MAP 10/10', date:'Jan 20, 2025' },
+  { name:'𝖘𝖎𝖑𝖊𝖓♱', stars:5, text:'If you are trying to give your city a legit Chicago vibe and haven\'t bought his chicago pack yet.. what are you waiting for???', date:'Jan 22, 2025' },
+  { name:'kd9', stars:5, text:'Having been a milos customer for 2 year, I\'ve never had a bad experience. You are sure to have plug and play mapping, then if it happens that there may be some conflict with other mapping, Milos will take the time to solve your problem with patience and understanding.', date:'Jan 24, 2025' },
+  { name:'Tripaloski', stars:5, text:'100/10, I have purchased several maps and they have always provided very good support!', date:'Jan 26, 2025' },
+  { name:'Alex', stars:5, text:'10/10. Ive had 600 connections to my server in the last 24 hours 30 of them being crashes and all 30 was GTA crashes and not the maps. Maps are fire asf and YBNMilos helped me out with any collision I had (caused by another map not his stuff) and got me right. Dont even look no were else this the place to shop', date:'Jan 28, 2025' },
+  { name:'XG_Whoops', stars:5, text:'100/10 Milos Mapping Map Files works with other amazing map creators! Defiantly worth every dollar!! YBNMilos On top!', date:'Jan 30, 2025' },
+  { name:'Austin ( CHEF ) {EJ}', stars:5, text:'MILO GOT ME RIGHT. came to him with a collission problem and bro got it handled quick asf and got me on my way! can def vouch for bro ❤️', date:'Feb 1, 2025' },
+  { name:'*MONEYBAG!!', stars:5, text:'10/10 ☑️🏆 I been purchasing from YBNMilos since last year August best map creator hands down and always willing to go above and beyond to help out when you need him no matter if it\'s maps from him or someone else maps vs other money hungry creators once you spend that money they start acting funny. 💯', date:'Feb 3, 2025' },
+  { name:'Anna', stars:5, text:'10/10 Best support ever for handling the situation i was in! I totally recommend their products and the way YBNMilos handled it is very much appreciated and very profesional!', date:'Feb 5, 2025' },
+  { name:'Şħąðøŵ', stars:5, text:'Best map developer for fivem!! I recommend getting those hoods maps especially if you want your city to look different and realistic!! If you have any problems with the maps he\'s the guy, he\'ll fix it as soon as possible. 10/10 customer service!!!', date:'Feb 7, 2025' },
+  { name:'Slexic', stars:5, text:'10/10 Good support purchased watts hood', date:'Feb 9, 2025' },
+  { name:'Deleted User', stars:5, text:'Man you don\'t realize we closed our previous server with avg 100 players top 500 tx admin servers due to shitty Chicago maps constantly giving players issues. I loaded in first time no render issues on very high full ext budget. That\'s what I love to see 🫡 5 STARS FOR MILO', date:'Feb 11, 2025' },
+  { name:'KobyBang409', stars:5, text:'100/100 if you not shopping with YBNMilos then you sleep on the whole fivem mapping the best no matter which direction you wanna take. I got all the mlos because by far has been the best I have ever seen. My boy has 5⭐️ customer service and support. He will look out for you any way he can to make sure you get what you looking for and fast. No one delivers these maps the way he do and it\'s never disappointing. Shop YBN or don\'t shop at all', date:'Feb 13, 2025' },
+  { name:'cuddy1110', stars:5, text:'10/10 Helped me out on his designated time off! Maps are fire too!', date:'Feb 15, 2025' },
+  { name:'ᴛᴏᴀꜱᴛ', stars:5, text:'10/10 YBNMilos is and will stay the best fivem mapping! his customer service is one of a kind helping me with all issues i had and fixed it quick for me with no issue!', date:'Feb 17, 2025' },
+  { name:'Mudcat Hussle', stars:5, text:'100/100 A1 service and most def make sure you good will recommend and will buy again 🔥🔥', date:'Feb 19, 2025' },
+  { name:'Bdot', stars:5, text:'10/10 fasholy fixed my shit quick ash, unlike other devs that\'ll tell you to pay n get ur maps merged.. def recommend 🤞', date:'Feb 21, 2025' },
+  { name:'Sheen', stars:5, text:'3 YEARS LATER STILL COPPIN THAT HOT FIREE!! Milo always making sure we good, only person ill ever buy hoods from and PUTS THE TIME IN TO MAKE IT NICE AND RUN AMAZING. 30+ heads in one spot in hoods and still pulls 140+ frames', date:'Feb 23, 2025' },
+  { name:'𝒮𝑜𝓊𝓁𝓈👻', stars:5, text:'1000/1000 Bro came in and got me right, No questions asked got straight to business!! All Files Are Very Legit!! 💯 and if it\'s any bugs or fixes that\'s may interfere with your MLO he going get you right Every-time and fast with it 💯🖤✨', date:'Feb 25, 2025' },
+  { name:'Rich30Rollin', stars:5, text:'1000/1000 BEST TO EVERY DO IT STG', date:'Feb 27, 2025' },
+  { name:'-Jxmmi-', stars:5, text:'100/100 real one, MLOs top notch and top customer service ☝️🐐🔥', date:'Mar 1, 2025' },
+  { name:'Brandon Dull', stars:5, text:'s/o YBNMilos I bought the chi blocks 1-9, chi sky bundle 1-7, chi penthouse, chi LaPuerta, chi Vespucci, all the housing shells, the Rockford mall and it all works great. He\'s also been helping me merge some of the maps. A lot of these other creators wouldn\'t take the time to do that. YBN is a real one. Best in the game. 💯', date:'Mar 3, 2025' },
+  { name:'NAZ4R3TH', stars:5, text:'Facts he always helps me out and always makes sure im happy', date:'Mar 5, 2025' },
+  { name:'MaDdHaTtEr1991', stars:5, text:'yo this guys rock thank u for this bad ass maps and beings im on a diff time zone they still got the best support glad i found u guys thanks', date:'Mar 7, 2025' },
+  { name:'SaltyChipz', stars:5, text:'⭐️⭐️⭐️⭐️⭐️ YBNMilos is the 🐐 and will get you straight tap in with em he\'s da 💣 Takes a ton of time out his day to make sure your maps are 🫖', date:'Mar 9, 2025' },
+  { name:'𝖏𝖚𝖘𝖙𝖒𝖊', stars:5, text:'10000000/1000000 - MLOs are on point, and any problem I have YBNMilos has fixed. Customer service skills and prompt replies are here! Thank you ✨', date:'Mar 11, 2025' },
+  { name:'Mudcat Hussle', stars:5, text:'Best creator on fivem no cap 10000/10000', date:'Mar 13, 2025' }
+];
+
+// Per-zone reviews — all zones share the same base reviews
 var reviews = {};
-Object.keys(zoneData).forEach(function(z){ reviews[z] = []; });
+Object.keys(zoneData).forEach(function(z){ reviews[z] = sharedReviews.slice(); });
 
 var currentZone = '';
 var selectedVideoIdx = -1;
@@ -778,8 +971,17 @@ function renderReviews() {
   avgEl.textContent = avg.toFixed(1);
   avgRow.innerHTML = starsHtml(Math.round(avg), 16);
   container.innerHTML = list.slice().reverse().map(function(r){
+    var avatarHtml = r.avatar
+      ? '<img src="'+r.avatar+'" class="review-avatar" onerror="this.style.display=\'none\'">'
+      : '';
     return '<div class="review-card">'
-      + '<div class="review-top"><span class="reviewer-name">'+escHtml(r.name)+'</span><span class="review-date">'+r.date+'</span></div>'
+      + '<div class="review-top">'
+      +   '<div style="display:flex;align-items:center;gap:8px;">'
+      +     avatarHtml
+      +     '<span class="reviewer-name">'+escHtml(r.name)+'</span>'
+      +   '</div>'
+      +   '<span class="review-date">'+r.date+'</span>'
+      + '</div>'
       + '<div class="review-stars">'+starsHtml(r.stars,14)+'</div>'
       + '<div class="review-text">'+escHtml(r.text)+'</div>'
       + '</div>';
@@ -795,17 +997,94 @@ document.querySelectorAll('.star-pick').forEach(function(s){
   });
 });
 
+// ── DISCORD OAUTH ──
+var DISCORD_CLIENT_ID = '1478349918350344242';
+var DISCORD_REDIRECT   = 'http://ybnmilos.com';
+var discordUser = null;
+
+function discordLogin() {
+  var state = Math.random().toString(36).substring(2);
+  sessionStorage.setItem('discord_state', state);
+  var params = new URLSearchParams({
+    client_id: DISCORD_CLIENT_ID,
+    redirect_uri: DISCORD_REDIRECT,
+    response_type: 'token',
+    scope: 'identify',
+    state: state
+  });
+  var popup = window.open(
+    'https://discord.com/api/oauth2/authorize?' + params.toString(),
+    'discord-login',
+    'width=500,height=700,scrollbars=yes'
+  );
+  // Poll for redirect back with token in hash
+  var timer = setInterval(function() {
+    try {
+      if (!popup || popup.closed) { clearInterval(timer); return; }
+      var hash = popup.location.hash;
+      if (hash && hash.includes('access_token')) {
+        clearInterval(timer);
+        popup.close();
+        var tokenParams = new URLSearchParams(hash.substring(1));
+        var token = tokenParams.get('access_token');
+        var retState = tokenParams.get('state');
+        if (retState !== sessionStorage.getItem('discord_state')) {
+          alert('Security error. Please try again.'); return;
+        }
+        fetchDiscordUser(token);
+      }
+    } catch(e) { /* cross-origin, keep waiting */ }
+  }, 500);
+}
+
+function fetchDiscordUser(token) {
+  fetch('https://discord.com/api/users/@me', {
+    headers: { Authorization: 'Bearer ' + token }
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(user) {
+    discordUser = {
+      id: user.id,
+      username: user.username,
+      avatar: user.avatar
+        ? 'https://cdn.discordapp.com/avatars/'+user.id+'/'+user.avatar+'.png'
+        : 'https://cdn.discordapp.com/embed/avatars/0.png'
+    };
+    showDiscordUser();
+  })
+  .catch(function(){ alert('Failed to fetch Discord profile. Please try again.'); });
+}
+
+function showDiscordUser() {
+  document.getElementById('discord-login-prompt').style.display = 'none';
+  document.getElementById('discord-review-form').style.display = 'block';
+  document.getElementById('discord-avatar').src = discordUser.avatar;
+  document.getElementById('discord-username').textContent = discordUser.username;
+}
+
+function discordLogout() {
+  discordUser = null;
+  document.getElementById('discord-login-prompt').style.display = 'block';
+  document.getElementById('discord-review-form').style.display = 'none';
+  document.getElementById('review-text').value = '';
+  selectedStars = 0;
+  document.querySelectorAll('.star-pick').forEach(function(sp){ sp.classList.remove('sel'); });
+}
+
 function submitReview(){
-  var name = document.getElementById('review-name').value.trim() || 'Anonymous';
+  if(!discordUser){ alert('Please login with Discord first.'); return; }
   var text = document.getElementById('review-text').value.trim();
   if(!selectedStars){ alert('Please select a star rating.'); return; }
   if(!text){ alert('Please write a comment.'); return; }
   var now = new Date();
   reviews[currentZone].push({
-    name: name, stars: selectedStars, text: text,
+    name: discordUser.username,
+    avatar: discordUser.avatar,
+    discordId: discordUser.id,
+    stars: selectedStars,
+    text: text,
     date: now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})
   });
-  document.getElementById('review-name').value='';
   document.getElementById('review-text').value='';
   selectedStars=0;
   document.querySelectorAll('.star-pick').forEach(function(sp){ sp.classList.remove('sel'); });
@@ -873,5 +1152,66 @@ setTimeout(function(){
   setTimeout(function(){ p.style.display='none'; },1800);
 },3000);
 </script>
+<!-- UPDATES SLIDE-UP PANEL -->
+<div id="updates-panel">
+  <div class="upd-panel-header">
+    <span>// Updates Log</span>
+    <div class="upd-pulse"></div>
+  </div>
+  <div class="upd-list" id="upd-list"></div>
+  <div class="upd-add">
+    <input type="text" id="upd-input" placeholder="Write a new update..." maxlength="120" />
+    <button onclick="addUpdate()">POST</button>
+  </div>
+</div>
+<button id="updates-trigger" onclick="toggleUpdates()">
+  UPDATES
+  <div class="upd-arrow"></div>
+</button>
+
+<script>
+var updatesData = [
+  { tag:'NEW', date:'03.04.26', title:'We just released our newest project!', desc:'Click to check it out →', isNew:true, link:'https://ybnmilos-mlo-world.tebex.io/category/1842533?package=7299529' },
+  { tag:'UPDATE', date:'03.04.26', title:'We just updated our HOSPITAL!! :)', desc:'Fresh updates are live — redownload and enjoy!', isNew:true, link:'https://ybnmilos-mlo-world.tebex.io/category/1842533?package=7118231' },
+  { tag:'UPDATE', date:'03.04.26', title:'More and new updates on VINEWOOD RAVE CAVE!', desc:'New additions dropped — go check them out!', isNew:true, link:'https://ybnmilos-mlo-world.tebex.io/category/1842533?package=7265962' },
+  { tag:'UPDATE', date:'03.04.26', title:'Updates dropped on ROCKFORD MALL!', desc:'Redownload to get the latest version! :)', isNew:true, link:'https://ybnmilos-mlo-world.tebex.io/category/1842533?package=6153305' },
+];
+function renderUpdates(){
+  var list=document.getElementById('upd-list');
+  list.innerHTML=updatesData.map(function(u){
+    var inner=
+      '<div class="upd-item-meta">'+
+        '<span class="upd-tag">'+u.tag+'</span>'+
+        (u.isNew?'<span class="upd-badge">NEW</span>':'')+
+        '<span class="upd-date">'+u.date+'</span>'+
+        (u.link?'<span style="margin-left:4px;font-size:11px;color:var(--blue);">↗</span>':'')+
+      '</div>'+
+      '<div class="upd-title">'+u.title+'</div>'+
+      (u.desc?'<div class="upd-desc">'+u.desc+'</div>':'')+
+      '';
+    if(u.link){
+      return '<a href="'+u.link+'" target="_blank" class="upd-item upd-item-link">'+inner+'</a>';
+    }
+    return '<div class="upd-item">'+inner+'</div>';
+  }).join('');
+}
+
+function toggleUpdates(){
+  document.getElementById('updates-panel').classList.toggle('open');
+  document.getElementById('updates-trigger').classList.toggle('open');
+}
+function addUpdate(){
+  var inp=document.getElementById('upd-input');
+  var val=inp.value.trim(); if(!val)return;
+  var now=new Date();
+  var d=String(now.getMonth()+1).padStart(2,'0')+'.'+String(now.getDate()).padStart(2,'0')+'.'+String(now.getFullYear()).slice(2);
+  updatesData.unshift({tag:'UPDATE',date:d,title:val,desc:'',isNew:true});
+  inp.value=''; renderUpdates();
+  document.getElementById('upd-list').scrollTop=0;
+}
+document.getElementById('upd-input').addEventListener('keydown',function(e){if(e.key==='Enter')addUpdate();});
+renderUpdates();
+</script>
+
 </body>
 </html>
