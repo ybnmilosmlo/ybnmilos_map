@@ -214,12 +214,9 @@
     }
     .fix-map-btn:hover { background:#ff880011; border-color:#ff8800; box-shadow:0 0 18px #ff880033; }
 
-    /* RIGHT FEEDBACK PANEL */
+    /* RIGHT FEEDBACK PANEL - now full width tab */
     .panel-feedback-side {
-      width:300px; min-width:260px;
-      border-left:1px solid #00bfff11;
-      display:flex; flex-direction:column;
-      overflow:hidden; flex-shrink:0;
+      display: none; /* no longer used as sidebar */
     }
 
     /* SPLIT BODY */
@@ -656,21 +653,25 @@
     <!-- Header -->
     <div class="panel-header">
       <div class="panel-zone-name" id="panel-zone-title">ZONE</div>
+      <div class="panel-tabs">
+        <button class="panel-tab active" id="tab-videos" onclick="switchTab('videos')">Videos</button>
+        <button class="panel-tab" id="tab-reviews" onclick="switchTab('reviews')">Reviews</button>
+      </div>
       <button class="panel-close" onclick="closePanel()">✕</button>
     </div>
 
     <!-- Body -->
     <div class="panel-body">
 
-      <!-- CENTER: MLO thumbnail grid -->
-      <div class="panel-center">
+      <!-- VIDEOS TAB -->
+      <div class="panel-center" id="tab-content-videos">
         <div class="mlo-grid-scroll">
           <div class="mlo-grid" id="mlo-grid"></div>
         </div>
       </div>
 
-      <!-- RIGHT: feedback panel -->
-      <div class="panel-feedback-side">
+      <!-- REVIEWS TAB -->
+      <div class="panel-center" id="tab-content-reviews" style="display:none;">
         <div class="feedback-wrap">
           <div class="reviews-area" id="reviews-area">
             <div class="reviews-header">
@@ -683,8 +684,7 @@
             <div id="reviews-list"><div class="no-reviews">No reviews yet. Be the first!</div></div>
           </div>
           <div class="submit-review" id="submit-review-section">
-
-            <!-- NOT LOGGED IN: show Discord login button -->
+            <!-- NOT LOGGED IN -->
             <div id="discord-login-prompt">
               <div class="submit-title">Leave a Review</div>
               <p class="discord-login-desc">Sign in with Discord to leave a review</p>
@@ -693,8 +693,7 @@
                 Login with Discord
               </button>
             </div>
-
-            <!-- LOGGED IN: show user info + review form -->
+            <!-- LOGGED IN -->
             <div id="discord-review-form" style="display:none;">
               <div class="discord-user-bar">
                 <img id="discord-avatar" class="discord-avatar" src="" alt="">
@@ -712,7 +711,6 @@
               <textarea class="review-textarea" id="review-text" placeholder="Share your experience with this zone's MLOs..."></textarea>
               <button class="submit-btn" id="submit-review-btn" onclick="submitReview()">Submit Review</button>
             </div>
-
           </div>
         </div>
       </div>
@@ -921,6 +919,13 @@ function starsHtml(n, size) {
 }
 
 // ── PANEL ──
+function switchTab(tab) {
+  document.getElementById('tab-content-videos').style.display = tab === 'videos' ? 'flex' : 'none';
+  document.getElementById('tab-content-reviews').style.display = tab === 'reviews' ? 'flex' : 'none';
+  document.getElementById('tab-videos').classList.toggle('active', tab === 'videos');
+  document.getElementById('tab-reviews').classList.toggle('active', tab === 'reviews');
+}
+
 function openPanel(zone) {
   currentZone = zone;
   selectedVideoIdx = -1;
@@ -928,6 +933,7 @@ function openPanel(zone) {
   document.getElementById('fix-zone-name').textContent = zone;
   buildMloGrid();
   renderReviews();
+  switchTab('videos');
   document.getElementById('zone-overlay').style.display = 'flex';
 }
 function closePanel() {
@@ -1159,10 +1165,6 @@ setTimeout(function(){
     <div class="upd-pulse"></div>
   </div>
   <div class="upd-list" id="upd-list"></div>
-  <div class="upd-add">
-    <input type="text" id="upd-input" placeholder="Write a new update..." maxlength="120" />
-    <button onclick="addUpdate()">POST</button>
-  </div>
 </div>
 <button id="updates-trigger" onclick="toggleUpdates()">
   UPDATES
@@ -1200,17 +1202,8 @@ function toggleUpdates(){
   document.getElementById('updates-panel').classList.toggle('open');
   document.getElementById('updates-trigger').classList.toggle('open');
 }
-function addUpdate(){
-  var inp=document.getElementById('upd-input');
-  var val=inp.value.trim(); if(!val)return;
-  var now=new Date();
-  var d=String(now.getMonth()+1).padStart(2,'0')+'.'+String(now.getDate()).padStart(2,'0')+'.'+String(now.getFullYear()).slice(2);
-  updatesData.unshift({tag:'UPDATE',date:d,title:val,desc:'',isNew:true});
-  inp.value=''; renderUpdates();
-  document.getElementById('upd-list').scrollTop=0;
-}
-document.getElementById('upd-input').addEventListener('keydown',function(e){if(e.key==='Enter')addUpdate();});
 renderUpdates();
+
 </script>
 
 </body>
