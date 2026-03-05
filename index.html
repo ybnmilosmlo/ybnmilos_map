@@ -49,6 +49,70 @@
     .pre-dots span:nth-child(3){animation-delay:.4s;}
     @keyframes dot{0%,100%{opacity:.3}50%{opacity:1}}
 
+    /* ANNOUNCEMENT BAR */
+    #announce-bar {
+      position: relative; z-index: 20;
+      display: flex; align-items: center; justify-content: center; gap: 14px;
+      padding: 10px 50px;
+      background: linear-gradient(90deg, #002a44 0%, #003a5c 50%, #002a44 100%);
+      border-bottom: 1px solid #00bfff44;
+      box-shadow: 0 2px 20px #00bfff18;
+      text-decoration: none;
+      overflow: hidden;
+      cursor: pointer;
+      transition: background .3s;
+    }
+    #announce-bar:hover { background: linear-gradient(90deg, #003355 0%, #004a74 50%, #003355 100%); }
+    #announce-bar::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(90deg, transparent 0%, rgba(0,191,255,0.06) 50%, transparent 100%);
+      animation: barShimmer 3s ease-in-out infinite;
+    }
+    @keyframes barShimmer {
+      0%, 100% { opacity: 0; transform: translateX(-100%); }
+      50% { opacity: 1; transform: translateX(100%); }
+    }
+    .announce-tag {
+      background: var(--blue);
+      color: #000;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 12px; letter-spacing: 3px;
+      padding: 3px 10px;
+      border-radius: 3px;
+      flex-shrink: 0;
+      box-shadow: 0 0 10px #00bfff66;
+    }
+    .announce-text {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px; letter-spacing: 3px;
+      color: #fff;
+      text-shadow: 0 0 20px #00bfff44;
+    }
+    .announce-text span { color: var(--blue); }
+    .announce-cta {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 12px; font-weight: 700; letter-spacing: 2px;
+      color: var(--blue);
+      border: 1px solid #00bfff66;
+      padding: 4px 12px;
+      border-radius: 3px;
+      flex-shrink: 0;
+      transition: all .2s;
+    }
+    #announce-bar:hover .announce-cta {
+      background: var(--blue);
+      color: #000;
+    }
+    .announce-close {
+      position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+      background: transparent; border: none;
+      color: #444; font-size: 16px; cursor: pointer;
+      transition: color .2s; line-height: 1;
+      z-index: 2;
+    }
+    .announce-close:hover { color: #fff; }
+
     /* CURSOR */
     #cursor {
       position: fixed; width: 80px; height: 80px; border-radius: 50%;
@@ -487,6 +551,134 @@
     }
     .upd-item-link:hover { background: #00bfff15 !important; border-left-color: #00d9ff !important; }
 
+    /* ══════════════════════════════════════════
+       GIVEAWAY POPUP
+    ══════════════════════════════════════════ */
+    #giveaway-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.85);
+      z-index: 999999;
+      display: flex; align-items: center; justify-content: center;
+      backdrop-filter: blur(8px);
+      opacity: 0;
+      transition: opacity .6s ease;
+    }
+    #giveaway-overlay.visible { opacity: 1; }
+
+    #giveaway-modal {
+      position: relative;
+      width: min(520px, 92vw);
+      background: var(--dark2);
+      border: 1px solid #00bfff44;
+      border-radius: 18px;
+      box-shadow: 0 0 80px #00bfff22, 0 0 160px #00bfff0a;
+      overflow: hidden;
+      transform: scale(.88) translateY(24px);
+      transition: transform .6s cubic-bezier(0.34,1.56,0.64,1);
+      text-align: center;
+    }
+    #giveaway-overlay.visible #giveaway-modal {
+      transform: scale(1) translateY(0);
+    }
+
+    .giveaway-top {
+      background: linear-gradient(135deg, #001a2e 0%, #002a44 50%, #001a2e 100%);
+      padding: 36px 32px 28px;
+      border-bottom: 1px solid #00bfff22;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .giveaway-top::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, #00bfff18 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .giveaway-logo {
+      width: 72px; height: 72px; object-fit: contain;
+      filter: brightness(0) saturate(100%) invert(58%) sepia(98%) saturate(400%) hue-rotate(170deg) brightness(110%) drop-shadow(0 0 12px #00bfff);
+      margin-bottom: 14px;
+      animation: logoPulse 3s ease-in-out infinite;
+    }
+    .giveaway-badge {
+      display: inline-block;
+      background: var(--blue);
+      color: #000;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 12px; letter-spacing: 4px;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+    }
+    .giveaway-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 38px; letter-spacing: 4px;
+      color: #fff;
+      text-shadow: 0 0 30px #00bfff55;
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+    .giveaway-title span { color: var(--blue); }
+    .giveaway-sub {
+      font-size: 13px; color: #666; letter-spacing: 1px;
+      margin-bottom: 0;
+    }
+
+    .giveaway-bottom {
+      padding: 26px 32px 30px;
+    }
+    .giveaway-desc {
+      font-size: 14px; color: #888; line-height: 1.7;
+      letter-spacing: .4px; margin-bottom: 22px;
+    }
+    .giveaway-desc strong { color: #ccc; }
+    .giveaway-enter-btn {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%;
+      padding: 16px;
+      background: #5865f2;
+      border: none; border-radius: 10px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px; letter-spacing: 4px;
+      color: #fff; cursor: pointer;
+      box-shadow: 0 0 30px #5865f233;
+      transition: all .3s; text-decoration: none;
+      margin-bottom: 12px;
+    }
+    .giveaway-enter-btn:hover {
+      background: #4752c4;
+      box-shadow: 0 0 50px #5865f255;
+      transform: translateY(-2px);
+    }
+    .giveaway-skip {
+      background: transparent; border: none;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 12px; color: #333; letter-spacing: 2px;
+      cursor: pointer; text-transform: uppercase;
+      transition: color .2s;
+    }
+    .giveaway-skip:hover { color: #666; }
+
+    .giveaway-close {
+      position: absolute; top: 14px; right: 16px;
+      background: transparent; border: none;
+      color: #333; font-size: 20px;
+      cursor: pointer; transition: color .2s; line-height: 1;
+      z-index: 2;
+    }
+    .giveaway-close:hover { color: #fff; }
+
+    /* scan line effect */
+    .giveaway-top::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,191,255,.015) 2px, rgba(0,191,255,.015) 4px);
+      pointer-events: none;
+    }
+
     /* FIX MODAL */
     #fix-overlay { position:fixed; inset:0; background:rgba(0,0,0,.85); z-index:99995; display:none; align-items:center; justify-content:center; backdrop-filter:blur(4px); }
     #fix-overlay.show { display:flex; }
@@ -552,6 +744,14 @@
 <div id="main" style="opacity:0;transition:opacity 4s cubic-bezier(0.4,0,0.2,1)">
   <div class="bg-image"></div>
   <div class="bg-grid"></div>
+
+  <!-- ANNOUNCEMENT BAR -->
+  <a id="announce-bar" href="https://ybnmilos-mlo-world.tebex.io/" target="_blank">
+    <div class="announce-tag">🔥 LIMITED TIME</div>
+    <div class="announce-text">GET <span>30% OFF</span> THE ENTIRE STORE — DON'T MISS OUT</div>
+    <div class="announce-cta">SHOP NOW →</div>
+    <button class="announce-close" onclick="event.preventDefault();event.stopPropagation();this.parentElement.style.display='none';">✕</button>
+  </a>
 
   <!-- NAV -->
   <nav>
@@ -1157,6 +1357,18 @@ setTimeout(function(){
   p.classList.add('hide');
   setTimeout(function(){ p.style.display='none'; },1800);
 },3000);
+
+
+function closeGiveaway(){
+  var ov = document.getElementById('giveaway-overlay');
+  ov.style.opacity = '0';
+  setTimeout(function(){ ov.style.display = 'none'; }, 500);
+}
+setTimeout(function(){
+  var ov = document.getElementById('giveaway-overlay');
+  ov.style.display = 'flex';
+  setTimeout(function(){ ov.classList.add('visible'); }, 50);
+}, 3200);
 </script>
 <!-- UPDATES SLIDE-UP PANEL -->
 <div id="updates-panel">
@@ -1205,6 +1417,30 @@ function toggleUpdates(){
 renderUpdates();
 
 </script>
+
+<!-- GIVEAWAY POPUP -->
+<div id="giveaway-overlay" onclick="if(event.target===this)closeGiveaway()">
+  <div id="giveaway-modal">
+    <button class="giveaway-close" onclick="closeGiveaway()">✕</button>
+    <div class="giveaway-top">
+      <img class="giveaway-logo" src="https://i.ibb.co/cSYFH6Y1/YBNLogo.png" alt="YBN">
+      <div class="giveaway-badge">🎁 GIVEAWAY LIVE</div>
+      <div class="giveaway-title">WIN A FREE<br><span>MLO PACK</span></div>
+      <div class="giveaway-sub">Exclusively for YBN Community Members</div>
+    </div>
+    <div class="giveaway-bottom">
+      <p class="giveaway-desc">
+        We're giving away a <strong>FREE MLO Pack</strong> to one lucky winner from our Discord!<br>
+        Join the server, head to <strong>#giveaway</strong> and enter for your chance to win.
+      </p>
+      <a href="https://discord.gg/EYnKMHT7YV" target="_blank" class="giveaway-enter-btn" onclick="closeGiveaway()">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.031.052a19.896 19.896 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+        ENTER ON DISCORD
+      </a>
+      <button class="giveaway-skip" onclick="closeGiveaway()">Maybe later</button>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
