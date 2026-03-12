@@ -29,18 +29,53 @@
       position: fixed; inset: 0; background: #04040f;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      z-index: 9999; transition: opacity 1.8s cubic-bezier(0.4,0,0.2,1);
+      z-index: 9999;
+      transition: opacity 1.2s cubic-bezier(0.4,0,0.2,1);
     }
     #preloader.hide { opacity: 0; pointer-events: none; }
-    .pre-logo-wrap { position: relative; width: 180px; height: 180px; margin-bottom: 28px; }
-    .pre-img-outline { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: .10; filter: brightness(0) invert(1); }
+    #preloader .pre-text-wrap {
+      display: flex; flex-direction: column; align-items: center;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    #preloader.logo-flying .pre-text-wrap {
+      opacity: 0; transform: translateY(10px);
+    }
+    .pre-logo-wrap {
+      position: relative; width: 180px; height: 180px; margin-bottom: 28px;
+      transition: none;
+    }
+    /* When flying, the logo-wrap gets positioned absolutely and animates to target */
+    .pre-logo-wrap.flying {
+      position: fixed;
+      margin: 0;
+      z-index: 10000;
+      pointer-events: none;
+    }
+    /* Blue base logo — fully visible as the unfilled state */
+    .pre-img-outline {
+      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain;
+      filter: brightness(0) saturate(100%) invert(58%) sepia(98%) saturate(400%) hue-rotate(170deg) brightness(110%) drop-shadow(0 0 8px #00bfff88);
+      opacity: 1;
+    }
+    /* White fill rises up over the blue */
     .pre-img-fill {
       position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain;
       clip-path: inset(100% 0 0 0);
-      animation: fillUp 3s cubic-bezier(0.4,0,0.2,1) forwards;
-      filter: brightness(0) saturate(100%) invert(58%) sepia(98%) saturate(400%) hue-rotate(170deg) brightness(110%) drop-shadow(0 0 6px #00bfff) drop-shadow(0 0 12px #00bfffaa);
+      animation: fillUp 2.8s cubic-bezier(0.4,0,0.2,1) forwards;
+      filter: brightness(0) invert(1) drop-shadow(0 0 6px rgba(255,255,255,0.9)) drop-shadow(0 0 14px rgba(255,255,255,0.5));
     }
     @keyframes fillUp { 0%{clip-path:inset(100% 0 0 0)} 100%{clip-path:inset(0% 0 0 0)} }
+
+    /* Glow burst: white flash then settle to hero-logo appearance */
+    .pre-img-fill.filled {
+      animation: fillUp 2.8s cubic-bezier(0.4,0,0.2,1) forwards, glowPulse 0.5s 2.8s ease-out forwards;
+    }
+    @keyframes glowPulse {
+      0%  { filter: brightness(0) invert(1) drop-shadow(0 0 6px rgba(255,255,255,0.9)) drop-shadow(0 0 14px rgba(255,255,255,0.5)); }
+      45% { filter: brightness(0) invert(1) drop-shadow(0 0 40px #fff) drop-shadow(0 0 80px #00bfff) drop-shadow(0 0 120px #00bfffcc); }
+      100%{ filter: drop-shadow(0 0 20px rgba(255,255,255,.6)) drop-shadow(0 0 40px #00bfff44); }
+    }
+
     .pre-title { color:#fff; font-family:'Bebas Neue',sans-serif; font-size:28px; letter-spacing:6px; margin-bottom:6px; }
     .pre-sub { color:var(--blue); font-size:13px; font-weight:700; letter-spacing:8px; margin-bottom:16px; }
     .pre-dots { display:flex; gap:6px; }
@@ -148,7 +183,7 @@
     .map-wrap { position:relative; width:min(1100px,96vw); overflow:hidden; border-radius:16px; border:1px solid #00bfff22; box-shadow:0 0 40px #00bfff11; }
     .map-wrap img.map-img { width:100%; display:block; transform-origin:center center; transition:transform .6s cubic-bezier(0.4,0,0.2,1); }
     .map-svg { position:absolute; inset:0; width:100%; height:100%; border-radius:16px; z-index:5; transform-origin:center center; transition:transform .6s cubic-bezier(0.4,0,0.2,1); }
-    .hero-logo { position:absolute; top:5%; left:50%; transform:translateX(-50%); width:clamp(100px,15%,190px); z-index:10; filter:drop-shadow(0 0 20px rgba(255,255,255,.6)) drop-shadow(0 0 40px #00bfff44); animation:logoPulse 3s ease-in-out infinite; pointer-events:none; }
+    .hero-logo { position:absolute; top:5%; left:50%; transform:translateX(-50%); width:clamp(100px,15%,190px); z-index:10; filter:drop-shadow(0 0 20px rgba(255,255,255,.6)) drop-shadow(0 0 40px #00bfff44); animation:logoPulse 3s ease-in-out infinite; pointer-events:none; opacity:0; transition: opacity 0.3s ease; }
     @keyframes logoPulse{0%,100%{filter:drop-shadow(0 0 15px rgba(255,255,255,.5)) drop-shadow(0 0 30px #00bfff22)}50%{filter:drop-shadow(0 0 30px rgba(255,255,255,.8)) drop-shadow(0 0 60px #00bfff55)}}
     .zone-shape { fill:var(--zc); fill-opacity:.15; stroke:var(--zc); stroke-width:2; stroke-opacity:.6; cursor:pointer; transition:fill-opacity .3s,filter .3s; filter:drop-shadow(0 0 4px var(--zc)); }
     .zone-shape:hover { fill-opacity:.45; filter:drop-shadow(0 0 12px var(--zc)) drop-shadow(0 0 20px var(--zc)); }
@@ -483,105 +518,96 @@
     /* ══════════════════════════════════════════
        UPDATES SLIDE-UP PANEL
     ══════════════════════════════════════════ */
-    #updates-trigger {
+    /* ══ LIVE UPDATES FEED (left side) ══ */
+    #live-updates-feed {
       position: fixed;
-      bottom: 0; left: 40px;
+      left: 20px; top: 50%;
+      transform: translateY(-50%);
+      width: 300px;
       z-index: 500;
-      display: flex; align-items: center; gap: 12px;
-      padding: 18px 48px;
-      background: var(--blue);
-      border: none;
-      border-radius: 8px 8px 0 0;
-      color: #000;
+      display: flex; flex-direction: column; gap: 0;
+      pointer-events: none;
+    }
+
+    /* Header label */
+    .luf-header {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 10px;
+      padding: 0 2px;
+    }
+    .luf-header-label {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 22px; letter-spacing: 5px; text-transform: uppercase;
-      cursor: pointer;
-      box-shadow: 0 0 30px #00bfff55, inset 0 1px 0 rgba(255,255,255,0.15);
-      transition: background .2s, box-shadow .2s, transform .15s;
+      font-size: 13px; letter-spacing: 4px; color: #00bfff88;
     }
-    #updates-trigger:hover {
-      background: #00d9ff;
-      box-shadow: 0 0 60px #00bfffaa;
-    }
-    #updates-trigger .upd-arrow {
-      width: 0; height: 0;
-      border-left: 6px solid transparent;
-      border-right: 6px solid transparent;
-      border-bottom: 8px solid #000;
-      transition: transform .35s cubic-bezier(.4,0,.2,1);
-    }
-    #updates-trigger.open .upd-arrow { transform: rotate(180deg); }
-
-    #updates-panel {
-      position: fixed;
-      bottom: 62px; left: 40px;
-      width: 480px;
-      z-index: 499;
-      background: var(--dark2);
-      border: 1px solid #00bfff44;
-      border-radius: 8px 8px 0 0;
-      overflow: hidden;
-      max-height: 0;
-      opacity: 0;
-      transition: max-height .42s cubic-bezier(.4,0,.2,1), opacity .3s;
-    }
-    #updates-panel.open { max-height: 600px; opacity: 1; }
-
-    .upd-panel-header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 20px;
-      border-bottom: 1px solid #00bfff11;
-      background: #07071599;
-    }
-    .upd-panel-header span {
-      font-size: 11px; font-weight: 700; letter-spacing: 3px; color: #00bfff88; text-transform: uppercase;
-    }
-    .upd-pulse {
-      width: 7px; height: 7px; border-radius: 50%;
+    .luf-pulse {
+      width: 6px; height: 6px; border-radius: 50%;
       background: var(--blue); box-shadow: 0 0 6px var(--blue);
       animation: dot 1.4s infinite; flex-shrink: 0;
     }
 
-    .upd-list { overflow-y: auto; max-height: 480px; }
-    .upd-list::-webkit-scrollbar { width: 3px; }
-    .upd-list::-webkit-scrollbar-thumb { background: #00bfff44; border-radius: 2px; }
+    /* Feed list */
+    #luf-list {
+      display: flex; flex-direction: column; gap: 8px;
+      overflow: hidden;
+    }
 
-    .upd-item {
-      padding: 18px 20px; border-bottom: 1px solid #00bfff08; transition: background .2s;
-    }
-    .upd-item:last-child { border-bottom: none; }
-    .upd-item:hover { background: #00bfff08; }
-    .upd-item-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
-    .upd-tag { font-size: 11px; font-weight: 700; letter-spacing: 2px; color: var(--blue); text-transform: uppercase; }
-    .upd-badge { background: var(--blue); color: #000; font-size: 9px; font-weight: 700; letter-spacing: 1px; padding: 2px 6px; text-transform: uppercase; }
-    .upd-date { font-size: 11px; color: #333; margin-left: auto; }
-    .upd-title { font-size: 17px; font-weight: 600; color: #ddd; letter-spacing: .5px; margin-bottom: 4px; }
-    .upd-desc { font-size: 13px; color: #555; line-height: 1.5; }
-
-    .upd-add {
-      display: flex; gap: 8px; padding: 12px 16px;
-      border-top: 1px solid #00bfff11; background: #07071599;
-    }
-    .upd-add input {
-      flex: 1; background: var(--dark); border: 1px solid #00bfff22; border-radius: 5px;
-      color: #ccc; font-family: 'Rajdhani', sans-serif; font-size: 14px;
-      padding: 9px 12px; outline: none; transition: border-color .2s;
-    }
-    .upd-add input::placeholder { color: #333; }
-    .upd-add input:focus { border-color: #00bfff66; }
-    .upd-add button {
-      background: var(--blue); border: none; border-radius: 5px;
-      color: #000; font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 2px;
-      padding: 9px 18px; cursor: pointer; transition: opacity .2s;
-    }
-    .upd-add button:hover { opacity: .8; }
-
-    .upd-item-link {
-      display: block; text-decoration: none;
+    .luf-item {
+      background: var(--dark2);
+      border: 1px solid #00bfff22;
+      border-left: 2px solid var(--blue);
+      border-radius: 10px;
+      padding: 12px 14px;
+      pointer-events: all;
       cursor: pointer;
-      border-left: 2px solid var(--blue) !important;
+      text-decoration: none;
+      display: block;
+      transform: translateY(-16px);
+      opacity: 0;
+      transition: transform 0.55s cubic-bezier(0.4,0,0.2,1),
+                  opacity 0.55s cubic-bezier(0.4,0,0.2,1),
+                  filter 0.55s ease,
+                  box-shadow 0.3s ease;
     }
-    .upd-item-link:hover { background: #00bfff15 !important; border-left-color: #00d9ff !important; }
+    .luf-item.visible { transform: translateY(0); opacity: 1; }
+    .luf-item.clear {
+      filter: none;
+      box-shadow: 0 0 18px #00bfff0a;
+    }
+    .luf-item.blurred {
+      filter: blur(2px);
+      opacity: 0.35 !important;
+      pointer-events: none;
+    }
+    .luf-item.clear:hover {
+      border-color: #00bfff66;
+      box-shadow: 0 0 22px #00bfff22;
+    }
+    .luf-meta { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
+    .luf-tag {
+      font-size: 9px; font-weight: 700; letter-spacing: 2px;
+      color: #000; background: var(--blue);
+      padding: 2px 7px; border-radius: 2px; text-transform: uppercase;
+    }
+    .luf-tag.update { background: #ff8800; }
+    .luf-badge {
+      font-size: 9px; font-weight: 700; letter-spacing: 1px;
+      color: var(--blue); border: 1px solid #00bfff44;
+      padding: 1px 5px; border-radius: 2px; text-transform: uppercase;
+    }
+    .luf-date { font-size: 10px; color: #333; margin-left: auto; letter-spacing: 1px; }
+    .luf-title { font-size: 13px; font-weight: 600; color: #ccc; line-height: 1.4; margin-bottom: 2px; }
+    .luf-desc { font-size: 11px; color: #555; line-height: 1.4; }
+    .luf-arrow { font-size: 10px; color: var(--blue); margin-left: 4px; }
+
+    /* Bottom fade mask */
+    #live-updates-feed::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 80px;
+      background: linear-gradient(to bottom, transparent, var(--dark));
+      pointer-events: none;
+      border-radius: 0 0 10px 10px;
+    }
 
     /* ══════════════════════════════════════════
        GIVEAWAY POPUP
@@ -750,6 +776,277 @@
     .copy-btn { background:transparent; border:1px solid #00bfff33; color:#00bfff; padding:4px 10px; border-radius:5px; font-family:'Rajdhani',sans-serif; font-size:11px; font-weight:700; letter-spacing:1px; cursor:pointer; white-space:nowrap; transition:all .2s; flex-shrink:0; }
     .copy-btn:hover { background:#00bfff22; border-color:#00bfff; }
 
+    /* ══ REVIEW SLIDER BAR ══ */
+    #review-slider-section {
+      position: relative; z-index: 1;
+      padding: 50px 0 30px;
+      border-top: 1px solid #00bfff11;
+      overflow: hidden;
+    }
+    .review-slider-label {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .review-slider-label span {
+      font-size: 11px; font-weight: 700; letter-spacing: 5px;
+      color: var(--blue); text-transform: uppercase;
+    }
+    .review-slider-outer {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+    }
+    /* Left/right blur fade masks */
+    .review-slider-fade-left,
+    .review-slider-fade-right {
+      position: absolute; top: 0; bottom: 0; width: 22%;
+      z-index: 4; pointer-events: none;
+    }
+    .review-slider-fade-left  { left: 0;  background: linear-gradient(to right, var(--dark) 0%, transparent 100%); }
+    .review-slider-fade-right { right: 0; background: linear-gradient(to left,  var(--dark) 0%, transparent 100%); }
+
+    .review-slider-track {
+      display: flex;
+      align-items: stretch;
+      gap: 20px;
+      padding: 16px 0 20px;
+      transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform;
+    }
+
+    .rv-card {
+      flex: 0 0 340px;
+      background: var(--dark2);
+      border: 1px solid #00bfff18;
+      border-radius: 14px;
+      padding: 24px 26px;
+      display: flex; flex-direction: column; gap: 12px;
+      transition: filter 0.7s ease, opacity 0.7s ease, transform 0.7s ease, border-color 0.7s ease, box-shadow 0.7s ease;
+      position: relative;
+    }
+    .rv-card.rv-center {
+      filter: none; opacity: 1;
+      border-color: #00bfff33;
+      box-shadow: 0 0 30px #00bfff18, 0 0 60px #00bfff08;
+      transform: scale(1.04);
+      z-index: 2;
+    }
+    .rv-card.rv-side {
+      filter: blur(2.5px);
+      opacity: 0.45;
+      transform: scale(0.96);
+    }
+    .rv-card.rv-far {
+      filter: blur(4px);
+      opacity: 0.2;
+      transform: scale(0.93);
+    }
+    .rv-header { display: flex; align-items: center; gap: 12px; }
+    .rv-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: linear-gradient(135deg, #00bfff44, #00bfff11);
+      border: 1px solid #00bfff44;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--blue);
+      flex-shrink: 0;
+    }
+    .rv-name { font-family: 'Rajdhani', sans-serif; font-size: 14px; font-weight: 700; color: #fff; letter-spacing: 1px; }
+    .rv-zone { font-size: 10px; font-weight: 600; letter-spacing: 2px; color: #555; text-transform: uppercase; margin-top: 1px; }
+    .rv-stars { display: flex; gap: 3px; }
+    .rv-star { color: #ffcc00; font-size: 14px; line-height: 1; }
+    .rv-star.empty { color: #333; }
+    .rv-text { font-size: 13px; color: #888; line-height: 1.7; letter-spacing: 0.3px; flex: 1; }
+    .rv-date { font-size: 10px; color: #333; letter-spacing: 1.5px; text-transform: uppercase; }
+
+    /* Dots */
+    .review-dots {
+      display: flex; justify-content: center; gap: 8px;
+      margin-top: 18px;
+    }
+    .rv-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #1a1a2e; border: 1px solid #00bfff33;
+      cursor: pointer; transition: all 0.3s;
+    }
+    .rv-dot.active { background: var(--blue); box-shadow: 0 0 8px #00bfff88; border-color: var(--blue); }
+
+    /* ══ MLO SPOTLIGHT SLIDER ══ */
+    #mlo-spotlight-section {
+      position: relative; z-index: 1;
+      padding: 50px 0 10px;
+      overflow: hidden;
+    }
+    .mlo-spot-label {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .mlo-spot-eyebrow {
+      display: block;
+      font-size: 11px; font-weight: 700; letter-spacing: 5px;
+      color: var(--blue); text-transform: uppercase; margin-bottom: 8px;
+    }
+    .mlo-spot-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 42px; letter-spacing: 6px; color: #fff;
+      text-shadow: 0 0 30px #00bfff22;
+      font-weight: 400; margin: 0;
+    }
+    .mlo-spot-outer {
+      position: relative; width: 100%; overflow: hidden;
+    }
+    .mlo-spot-fade-left,
+    .mlo-spot-fade-right {
+      position: absolute; top: 0; bottom: 0; width: 12%;
+      z-index: 4; pointer-events: none;
+    }
+    .mlo-spot-fade-left  { left: 0;  background: linear-gradient(to right, var(--dark) 0%, transparent 100%); }
+    .mlo-spot-fade-right { right: 0; background: linear-gradient(to left,  var(--dark) 0%, transparent 100%); }
+
+    .mlo-spot-track {
+      display: flex; align-items: stretch; gap: 16px;
+      padding: 16px 0 24px;
+      transition: transform 0.7s cubic-bezier(0.4,0,0.2,1);
+      will-change: transform;
+    }
+
+    .mlo-sc {
+      flex: 0 0 220px;
+      border-radius: 14px;
+      overflow: hidden;
+      transition: filter 0.6s ease, opacity 0.6s ease, transform 0.6s ease, border-color 0.6s ease, box-shadow 0.6s ease;
+      position: relative;
+      cursor: pointer;
+    }
+    .mlo-sc.msc-clear {
+      filter: none; opacity: 1;
+      border-color: #00bfff28;
+    }
+    .mlo-sc.msc-clear:hover {
+      border-color: #00bfff66;
+      box-shadow: 0 0 28px #00bfff1a;
+      transform: translateY(-4px) scale(1.02) !important;
+    }
+    .mlo-sc.msc-blur {
+      filter: blur(3px);
+      opacity: 0.22;
+      pointer-events: none;
+    }
+
+    /* Photo card */
+    .mlo-sc-photo-wrap {
+      position: relative; width: 100%;
+      aspect-ratio: 3/4;
+      overflow: hidden; border-radius: 14px;
+    }
+    .mlo-sc-photo {
+      width: 100%; height: 100%; object-fit: cover; object-position: top center;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+    .mlo-sc.msc-clear:hover .mlo-sc-photo { transform: scale(1.05); }
+    /* Dark gradient overlay from bottom */
+    .mlo-sc-photo-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom,
+        rgba(4,4,15,0) 30%,
+        rgba(4,4,15,0.5) 60%,
+        rgba(4,4,15,0.92) 100%
+      );
+    }
+    /* Text pinned to bottom */
+    .mlo-sc-photo-bottom {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 14px 16px 16px;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .mlo-sc-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px; letter-spacing: 2px; color: #fff; line-height: 1;
+    }
+    .mlo-sc-server {
+      font-size: 11px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    /* Accent top bar */
+    .mlo-sc-accent {
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px; opacity: 0.8;
+    }
+
+    /* dots */
+    .mlo-spot-dots {
+      display: flex; justify-content: center; gap: 8px; margin-top: 4px; padding-bottom: 40px;
+    }
+    .msd-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #1a1a2e; border: 1px solid #00bfff33;
+      cursor: pointer; transition: all 0.3s;
+    }
+    .msd-dot.active { background: var(--blue); box-shadow: 0 0 8px #00bfff88; border-color: var(--blue); }
+
+    /* ══ MAP LOAD OVERLAY ══ */
+    #map-load-overlay {
+      position: absolute; inset: 0; z-index: 6;
+      background: #04040f;
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.9s ease;
+    }
+    #map-load-overlay.done { opacity: 0; pointer-events: none; }
+
+    #map-wireframe-canvas {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      border-radius: 16px;
+      opacity: 0.55;
+    }
+
+    #map-load-ui {
+      position: relative; z-index: 2;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      pointer-events: none;
+    }
+    #map-load-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 13px; letter-spacing: 6px;
+      color: #00bfff99;
+    }
+    #map-load-pct {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 86px; line-height: 1;
+      color: #fff;
+      letter-spacing: -2px;
+      text-shadow: 0 0 40px #00bfff88, 0 0 80px #00bfff44;
+    }
+    #map-load-pct span { font-size: 40px; color: var(--blue); }
+    #map-load-bar-wrap {
+      width: 280px; height: 3px;
+      background: #ffffff0a;
+      border-radius: 3px;
+      position: relative; overflow: visible;
+    }
+    #map-load-bar-fill {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, #0066aa, #00bfff);
+      border-radius: 3px;
+      transition: width 0.12s linear;
+      position: relative; z-index: 1;
+    }
+    #map-load-bar-glow {
+      position: absolute; top: -4px; left: 0; height: 11px;
+      width: 0%;
+      background: linear-gradient(90deg, transparent, #00bfffff);
+      border-radius: 6px;
+      filter: blur(4px);
+      transition: width 0.12s linear;
+      pointer-events: none;
+    }
+    #map-load-sub {
+      font-size: 10px; font-weight: 700; letter-spacing: 4px;
+      color: #333; text-transform: uppercase;
+      min-height: 16px;
+    }
+
     @media(max-width:700px){
       .features{grid-template-columns:1fr;}
       .panel-left{width:180px;}
@@ -764,13 +1061,15 @@
 
 <!-- PRELOADER -->
 <div id="preloader">
-  <div class="pre-logo-wrap">
+  <div class="pre-logo-wrap" id="pre-logo-wrap">
     <img class="pre-img-outline" src="https://i.ibb.co/cSYFH6Y1/YBNLogo.png" alt="">
-    <img class="pre-img-fill" src="https://i.ibb.co/cSYFH6Y1/YBNLogo.png" alt="">
+    <img class="pre-img-fill" id="pre-img-fill" src="https://i.ibb.co/cSYFH6Y1/YBNLogo.png" alt="">
   </div>
-  <p class="pre-title">YBN MILOS</p>
-  <p class="pre-sub">LOADING</p>
-  <div class="pre-dots"><span></span><span></span><span></span></div>
+  <div class="pre-text-wrap">
+    <p class="pre-title">YBN MILOS</p>
+    <p class="pre-sub">LOADING</p>
+    <div class="pre-dots"><span></span><span></span><span></span></div>
+  </div>
 </div>
 
 <div id="main" style="opacity:0;transition:opacity 4s cubic-bezier(0.4,0,0.2,1)">
@@ -800,8 +1099,21 @@
   <!-- HERO MAP -->
   <section class="hero">
     <div class="map-wrap">
-      <img class="map-img" src="https://i.ibb.co/MkhSCRWt/Milos-Map3.png" alt="Map">
+      <img class="map-img" id="map-img" src="https://i.ibb.co/MkhSCRWt/Milos-Map3.png" alt="Map" style="opacity:0;transition:opacity 0.8s ease;">
       <img src="https://i.ibb.co/cSYFH6Y1/YBNLogo.png" alt="YBN" class="hero-logo">
+      <!-- MAP LOAD OVERLAY -->
+      <div id="map-load-overlay">
+        <canvas id="map-wireframe-canvas"></canvas>
+        <div id="map-load-ui">
+          <div id="map-load-label">INITIALIZING MAP DATA</div>
+          <div id="map-load-pct">0<span>%</span></div>
+          <div id="map-load-bar-wrap">
+            <div id="map-load-bar-fill"></div>
+            <div id="map-load-bar-glow"></div>
+          </div>
+          <div id="map-load-sub">SCANNING TERRAIN...</div>
+        </div>
+      </div>
       <svg class="map-svg" viewBox="0 0 1262 1092" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
         <g class="zone-group" onclick="openPanel('Southside')">
           <polygon class="zone-shape" style="--zc:#0088cc" points="239,445 221,454 197,479 179,504 183,523 198,533 228,537 261,533 274,521 282,501 284,469 279,454"/>
@@ -851,6 +1163,20 @@
     <div class="stat"><div class="stat-number">24/7</div><div class="stat-label">Support</div></div>
   </div>
 
+  <!-- MLO SPOTLIGHT -->
+  <div id="mlo-spotlight-section">
+    <div class="mlo-spot-label">
+      <span class="mlo-spot-eyebrow">// Seen On Popular Servers</span>
+      <h2 class="mlo-spot-title">MLO SPOTLIGHT</h2>
+    </div>
+    <div class="mlo-spot-outer">
+      <div class="mlo-spot-fade-left"></div>
+      <div class="mlo-spot-fade-right"></div>
+      <div class="mlo-spot-track" id="mlo-spot-track"></div>
+    </div>
+    <div class="mlo-spot-dots" id="mlo-spot-dots"></div>
+  </div>
+
   <!-- FEATURES -->
   <div class="section-label"><span>Why Choose Us</span></div>
   <div class="features">
@@ -860,6 +1186,17 @@
     <div class="feature-card"><div class="feature-icon">🔧</div><div class="feature-title">Full Support</div><div class="feature-text">Dedicated support team available via Discord. Open a ticket and get answered fast.</div></div>
     <div class="feature-card"><div class="feature-icon">🎮</div><div class="feature-title">Test Server</div><div class="feature-text">Try before you buy on our live FiveM test server. See every MLO in action before purchasing.</div></div>
     <div class="feature-card"><div class="feature-icon">💰</div><div class="feature-title">Best Prices</div><div class="feature-text">Weekly discounts, bundle deals, and a monthly subscription to get access to everything.</div></div>
+  </div>
+
+  <!-- REVIEW SLIDER BAR -->
+  <div id="review-slider-section">
+    <div class="review-slider-label"><span>// What Our Customers Say</span></div>
+    <div class="review-slider-outer">
+      <div class="review-slider-fade-left"></div>
+      <div class="review-slider-fade-right"></div>
+      <div class="review-slider-track" id="review-slider-track"></div>
+    </div>
+    <div class="review-dots" id="review-dots"></div>
   </div>
 
   <!-- FOOTER -->
@@ -1386,12 +1723,72 @@ document.querySelectorAll('a,button,.zone-group,.mlo-card,.star-pick,.fix-link,.
 });
 
 // ── PRELOADER ──
-setTimeout(function(){ document.getElementById('main').style.opacity='1'; },1500);
+setTimeout(function(){ document.getElementById('main').style.opacity='1'; },1800);
+
+// After fill completes (~2.8s): glow burst, text fades, logo flies to map position
 setTimeout(function(){
-  var p=document.getElementById('preloader');
-  p.classList.add('hide');
-  setTimeout(function(){ p.style.display='none'; },1800);
-},3000);
+  var preloader = document.getElementById('preloader');
+  var logoWrap = document.getElementById('pre-logo-wrap');
+  var fill = document.getElementById('pre-img-fill');
+  var heroLogo = document.querySelector('.hero-logo');
+
+  // Add glow class
+  fill.classList.add('filled');
+
+  // 400ms after fill: start the fly sequence
+  setTimeout(function(){
+    // Fade out text, keep preloader bg visible briefly
+    preloader.classList.add('logo-flying');
+
+    // Get logo wrap current position (centered in preloader)
+    var wrapRect = logoWrap.getBoundingClientRect();
+
+    // Get target position: hero-logo on the map
+    // Hero logo is hidden until main fades in, so compute based on map-wrap
+    var mapWrap = document.querySelector('.map-wrap');
+    var mapRect = mapWrap.getBoundingClientRect();
+
+    // hero-logo is at top:5%, left:50% of map-wrap, width=clamp(100px,15%,190px)
+    var targetW = Math.min(190, Math.max(100, mapRect.width * 0.15));
+    var targetX = mapRect.left + mapRect.width / 2 - targetW / 2;
+    var targetY = mapRect.top + mapRect.height * 0.05;
+
+    // Snapshot the logo into a fixed flying clone
+    logoWrap.classList.add('flying');
+    logoWrap.style.left = wrapRect.left + 'px';
+    logoWrap.style.top = wrapRect.top + 'px';
+    logoWrap.style.width = wrapRect.width + 'px';
+    logoWrap.style.height = wrapRect.height + 'px';
+
+    // Fade preloader bg
+    preloader.style.background = 'transparent';
+
+    // Hide the blue outline — only white fill flies to map
+    var outline = logoWrap.querySelector('.pre-img-outline');
+    if (outline) outline.style.opacity = '0';
+
+    // Animate logo flying to target
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        logoWrap.style.transition = 'left 0.9s cubic-bezier(0.4,0,0.2,1), top 0.9s cubic-bezier(0.4,0,0.2,1), width 0.9s cubic-bezier(0.4,0,0.2,1), height 0.9s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease 0.7s';
+        logoWrap.style.left = targetX + 'px';
+        logoWrap.style.top = targetY + 'px';
+        logoWrap.style.width = targetW + 'px';
+        logoWrap.style.height = targetW + 'px';
+      });
+    });
+
+    // After fly lands: hide flying clone, show real hero-logo, hide preloader
+    setTimeout(function(){
+      heroLogo.style.opacity = '1';
+      logoWrap.style.opacity = '0';
+      preloader.classList.add('hide');
+      setTimeout(function(){ preloader.style.display='none'; logoWrap.remove(); }, 600);
+    }, 950);
+
+  }, 450);
+
+}, 2800);
 
 
 function closeGiveaway(){
@@ -1399,57 +1796,484 @@ function closeGiveaway(){
   ov.style.opacity = '0';
   setTimeout(function(){ ov.style.display = 'none'; }, 500);
 }
-setTimeout(function(){
+function showGiveaway(){
   var ov = document.getElementById('giveaway-overlay');
   ov.style.display = 'flex';
   setTimeout(function(){ ov.classList.add('visible'); }, 50);
-}, 3200);
+}
 </script>
 <!-- UPDATES SLIDE-UP PANEL -->
-<div id="updates-panel">
-  <div class="upd-panel-header">
-    <span>// Updates Log</span>
-    <div class="upd-pulse"></div>
+<!-- LIVE UPDATES FEED -->
+<div id="live-updates-feed">
+  <div class="luf-header">
+    <div class="luf-pulse"></div>
+    <span class="luf-header-label">// LIVE UPDATES</span>
   </div>
-  <div class="upd-list" id="upd-list"></div>
+  <div id="luf-list"></div>
 </div>
-<button id="updates-trigger" onclick="toggleUpdates()">
-  UPDATES
-  <div class="upd-arrow"></div>
-</button>
 
 <script>
-var updatesData = [
-  { tag:'NEW', date:'03.04.26', title:'We just released our newest project!', desc:'Click to check it out →', isNew:true, link:'https://ybnmilos-mlo-world.tebex.io/category/1842533?package=7299529' },
-  { tag:'UPDATE', date:'03.04.26', title:'We just updated our HOSPITAL!! :)', desc:'Fresh updates are live — redownload and enjoy!', isNew:true, link:'https://ybnmilos-mlo-world.tebex.io/category/1842533?package=7118231' },
-  { tag:'UPDATE', date:'03.04.26', title:'More and new updates on VINEWOOD RAVE CAVE!', desc:'New additions dropped — go check them out!', isNew:true, link:'https://ybnmilos-mlo-world.tebex.io/category/1842533?package=7265962' },
-  { tag:'UPDATE', date:'03.04.26', title:'Updates dropped on ROCKFORD MALL!', desc:'Redownload to get the latest version! :)', isNew:true, link:'https://ybnmilos-mlo-world.tebex.io/category/1842533?package=6153305' },
+// ── LIVE UPDATES FEED ──
+var lufData = [
+  { tag:'NEW',    date:'03.04.26', title:'We just released our newest project!',          desc:'Click to check it out →',                      isNew:true, link:'https://ybnmilos-mlo-world.tebex.io/category/1842533?package=7299529' },
+  { tag:'UPDATE', date:'03.04.26', title:'HOSPITAL updated with fresh content!',           desc:'Fresh updates are live — redownload and enjoy!', isNew:true, link:'https://ybnmilos-mlo-world.tebex.io/category/1842533?package=7118231' },
+  { tag:'UPDATE', date:'03.04.26', title:'VINEWOOD RAVE CAVE got more additions!',         desc:'New additions dropped — go check them out!',     isNew:true, link:'https://ybnmilos-mlo-world.tebex.io/category/1842533?package=7265962' },
+  { tag:'UPDATE', date:'03.04.26', title:'ROCKFORD MALL update is live!',                  desc:'Redownload to get the latest version! :)',       isNew:true, link:'https://ybnmilos-mlo-world.tebex.io/category/1842533?package=6153305' },
+  { tag:'NEW',    date:'02.28.26', title:'BATON ROUGE pack released!',                     desc:'Brand new city — go explore now →',              isNew:false, link:'https://ybnmilos-mlo-world.tebex.io/' },
+  { tag:'UPDATE', date:'02.20.26', title:'DETROIT streets pack updated.',                  desc:'Performance improvements and new spots added.',  isNew:false, link:'https://ybnmilos-mlo-world.tebex.io/' },
+  { tag:'NEW',    date:'02.10.26', title:'Monthly subscription now available!',            desc:'Get all MLOs for one low price →',               isNew:false, link:'https://ybnmilos-mlo-world.tebex.io/category/monthly-subscription' },
 ];
-function renderUpdates(){
-  var list=document.getElementById('upd-list');
-  list.innerHTML=updatesData.map(function(u){
-    var inner=
-      '<div class="upd-item-meta">'+
-        '<span class="upd-tag">'+u.tag+'</span>'+
-        (u.isNew?'<span class="upd-badge">NEW</span>':'')+
-        '<span class="upd-date">'+u.date+'</span>'+
-        (u.link?'<span style="margin-left:4px;font-size:11px;color:var(--blue);">↗</span>':'')+
-      '</div>'+
-      '<div class="upd-title">'+u.title+'</div>'+
-      (u.desc?'<div class="upd-desc">'+u.desc+'</div>':'')+
-      '';
-    if(u.link){
-      return '<a href="'+u.link+'" target="_blank" class="upd-item upd-item-link">'+inner+'</a>';
-    }
-    return '<div class="upd-item">'+inner+'</div>';
-  }).join('');
+
+var lufList = document.getElementById('luf-list');
+var lufVisible = []; // items currently shown, newest first
+var lufIndex = 0;    // which data item to push next
+var CLEAR_COUNT = 3; // first N items fully visible
+
+function lufApplyClasses() {
+  var items = lufList.querySelectorAll('.luf-item');
+  items.forEach(function(el, i) {
+    el.classList.remove('clear', 'blurred');
+    if (i < CLEAR_COUNT) el.classList.add('clear');
+    else el.classList.add('blurred');
+  });
 }
 
-function toggleUpdates(){
-  document.getElementById('updates-panel').classList.toggle('open');
-  document.getElementById('updates-trigger').classList.toggle('open');
+function lufPushItem() {
+  if (lufIndex >= lufData.length) lufIndex = 0; // loop
+  var u = lufData[lufIndex++];
+
+  var tagClass = u.tag === 'UPDATE' ? 'luf-tag update' : 'luf-tag';
+  var inner =
+    '<div class="luf-meta">' +
+      '<span class="' + tagClass + '">' + u.tag + '</span>' +
+      (u.isNew ? '<span class="luf-badge">NEW</span>' : '') +
+      '<span class="luf-date">' + u.date + '</span>' +
+    '</div>' +
+    '<div class="luf-title">' + u.title + (u.link ? '<span class="luf-arrow">↗</span>' : '') + '</div>' +
+    (u.desc ? '<div class="luf-desc">' + u.desc + '</div>' : '');
+
+  var el;
+  if (u.link) {
+    el = document.createElement('a');
+    el.href = u.link;
+    el.target = '_blank';
+  } else {
+    el = document.createElement('div');
+  }
+  el.className = 'luf-item';
+  el.innerHTML = inner;
+
+  // Prepend (new items go to top)
+  lufList.insertBefore(el, lufList.firstChild);
+
+  // Animate in
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){ el.classList.add('visible'); });
+  });
+
+  lufApplyClasses();
+
+  // Keep max 7 items in DOM
+  var all = lufList.querySelectorAll('.luf-item');
+  if (all.length > 7) {
+    all[all.length - 1].remove();
+  }
 }
-renderUpdates();
+
+// Stagger initial items: push first 4 one by one, then loop every 5s
+(function seedFeed() {
+  var delays = [600, 1400, 2200, 3000];
+  delays.forEach(function(d) {
+    setTimeout(lufPushItem, d);
+  });
+  setTimeout(function() {
+    setInterval(lufPushItem, 5000);
+  }, 3200);
+})();
+
+// ── REVIEW SLIDER ──
+var sliderReviews = [
+  { name:'DripKing_FiveM',  zone:'Southside MLO',      stars:5, text:'Bro this MLO is insane. Never seen anything this clean on FiveM. Server players go crazy every time they find a new spot.',  date:'Feb 2025' },
+  { name:'YungServer',      zone:'Downtown MLO',        stars:5, text:'Bought the Downtown pack and it literally transformed our whole server vibe. Quality is unmatched, support replied in 10 mins.',  date:'Jan 2025' },
+  { name:'CrimsonRP',       zone:'Vinewood MLO',        stars:5, text:'Every single MLO is hand-crafted. You can tell real effort went into this. Our player count went up after installing these.',   date:'Mar 2025' },
+  { name:'GhostDev_',       zone:'Paleto MLO',          stars:5, text:'Easy install, zero conflicts. Dropped it in and it worked first try. The detail on the interiors is on another level fr.',       date:'Feb 2025' },
+  { name:'StreetzRP',       zone:'East Los Santos MLO', stars:5, text:'YBN Milos MLOs are the standard. Other packs look cheap after you see these. Been a customer for 6 months straight.',           date:'Dec 2024' },
+  { name:'NightOwl_Dev',    zone:'Baltimore MLO',       stars:5, text:'Got the subscription and it was the best decision. New content drops constantly and everything is plug and play ready.',        date:'Mar 2025' },
+  { name:'LowkeyFiveM',    zone:'Vespucci MLO',        stars:5, text:'The attention to detail is what separates YBN from everyone else. Players actually explore now instead of just driving around.', date:'Jan 2025' },
+];
+
+var rvCurrent = 0;
+var rvTotal = sliderReviews.length;
+var rvTimer = null;
+var rvAnimating = false;
+
+function buildReviewSlider() {
+  var track = document.getElementById('review-slider-track');
+  var dotsEl = document.getElementById('review-dots');
+  track.innerHTML = '';
+  dotsEl.innerHTML = '';
+
+  sliderReviews.forEach(function(r, i) {
+    var card = document.createElement('div');
+    card.className = 'rv-card';
+    card.dataset.idx = i;
+    var stars = '';
+    for (var s = 0; s < 5; s++) stars += '<span class="rv-star' + (s < r.stars ? '' : ' empty') + '">★</span>';
+    card.innerHTML =
+      '<div class="rv-header">' +
+        '<div class="rv-avatar">' + r.name.charAt(0).toUpperCase() + '</div>' +
+        '<div><div class="rv-name">' + r.name + '</div><div class="rv-zone">' + r.zone + '</div></div>' +
+      '</div>' +
+      '<div class="rv-stars">' + stars + '</div>' +
+      '<div class="rv-text">' + r.text + '</div>' +
+      '<div class="rv-date">' + r.date + '</div>';
+    card.addEventListener('click', function(){ goToReview(parseInt(this.dataset.idx)); });
+    track.appendChild(card);
+
+    var dot = document.createElement('div');
+    dot.className = 'rv-dot';
+    dot.dataset.idx = i;
+    dot.addEventListener('click', function(){ goToReview(parseInt(this.dataset.idx)); });
+    dotsEl.appendChild(dot);
+  });
+
+  positionSlider(rvCurrent, false);
+}
+
+function positionSlider(idx, animate) {
+  var track = document.getElementById('review-slider-track');
+  var cards = track.querySelectorAll('.rv-card');
+  var dots  = document.getElementById('review-dots').querySelectorAll('.rv-dot');
+  var outer = document.querySelector('.review-slider-outer');
+
+  if (!animate) track.style.transition = 'none';
+  else track.style.transition = 'transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)';
+
+  var outerW = outer.offsetWidth;
+  var cardW  = cards[0] ? cards[0].offsetWidth : 340;
+  var gap    = 20;
+
+  // Center the active card
+  var centerOffset = outerW / 2 - cardW / 2;
+  var translateX = centerOffset - idx * (cardW + gap);
+  track.style.transform = 'translateX(' + translateX + 'px)';
+
+  // Update classes
+  cards.forEach(function(c, i) {
+    c.classList.remove('rv-center', 'rv-side', 'rv-far');
+    var dist = Math.abs(i - idx);
+    if (dist === 0) c.classList.add('rv-center');
+    else if (dist === 1) c.classList.add('rv-side');
+    else c.classList.add('rv-far');
+  });
+
+  dots.forEach(function(d, i) {
+    d.classList.toggle('active', i === idx);
+  });
+
+  if (!animate) {
+    requestAnimationFrame(function(){
+      track.style.transition = 'transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)';
+    });
+  }
+}
+
+function goToReview(idx) {
+  rvCurrent = ((idx % rvTotal) + rvTotal) % rvTotal;
+  positionSlider(rvCurrent, true);
+  resetRvTimer();
+}
+
+function nextReview() {
+  rvCurrent = (rvCurrent + 1) % rvTotal;
+  positionSlider(rvCurrent, true);
+}
+
+function resetRvTimer() {
+  clearInterval(rvTimer);
+  rvTimer = setInterval(nextReview, 5000);
+}
+
+buildReviewSlider();
+resetRvTimer();
+window.addEventListener('resize', function(){ positionSlider(rvCurrent, false); });
+
+// ── MLO SPOTLIGHT SLIDER ──
+var mloSpotData = [
+  { name: 'YBN',          server: 'Los Los Scandalous', serverColor: '#00bfff', img: 'https://i.ibb.co/8nrDrGY3/YBN.jpg' },
+  { name: 'LIL DURK',     server: 'The Trenches',       serverColor: '#00bfff', img: 'https://i.ibb.co/BH0hn58t/download.jpg' },
+  { name: 'TEE GRIZZLEY', server: 'GrizzleyWorld',      serverColor: '#00bfff', img: 'https://i.ibb.co/2YtM47rR/MV5-BMTU5-Nj-Yz-NTk1-Ml5-BMl5-Ban-Bn-Xk-Ft-ZTgw-NDkx-MDM5-NTM-V1.jpg' },
+  { name: 'SAUCE GARDNER',server: 'New Sauce',           serverColor: '#00bfff', img: 'https://i.ibb.co/SXsf5J6Q/2025-NYJ-Media-Day-Sauce-Gardner-cropped.png' },
+  { name: 'YOUNG M.A',    server: 'RedLyfe',             serverColor: '#00bfff', img: 'https://i.ibb.co/qYH0g5ZV/Screenshot-1.png' },
+  { name: 'CHIEF KEEF',   server: '4Nem',                serverColor: '#00bfff', img: 'https://i.ibb.co/ycNG5g1P/650c0e7aac9d210bf99eb3a0-1024px-Chiefkeefspaccatutto.jpg' },
+  { name: 'LIL BABY',     server: '4PF',                 serverColor: '#00bfff', img: 'https://i.ibb.co/5W4pjXqy/48fd0407-2660-45ad-b811-6db0ae12c4da.jpg' },
+  { name: 'EST GEE',      server: 'ESTGAMING',           serverColor: '#ff6600', img: 'https://i.ibb.co/Q31rxcdD/channels4-profile.jpg' },
+  { name: 'KODAK BLACK',  server: 'Project Baby',        serverColor: '#9b59b6', img: 'https://i.ibb.co/j95FqMFM/Kodak-Black-Press-Photo-by-David-Cabrera.jpg' },
+];
+
+var msCurrent = 0;
+var msTotal = mloSpotData.length;
+var msTimer = null;
+var SPOT_CLEAR = 5; // show 5 cards clear
+
+function buildMloSpot() {
+  var track = document.getElementById('mlo-spot-track');
+  var dotsEl = document.getElementById('mlo-spot-dots');
+  track.innerHTML = '';
+  dotsEl.innerHTML = '';
+
+  // Build enough cards to always have 5 visible — repeat data if needed
+  // We'll create 3 copies of the data for seamless looping feel
+  var expanded = [];
+  for (var r = 0; r < 3; r++) {
+    mloSpotData.forEach(function(d, i) { expanded.push({ data: d, origIdx: i }); });
+  }
+
+  expanded.forEach(function(item, i) {
+    var d = item.data;
+    var card = document.createElement('div');
+    card.className = 'mlo-sc';
+    card.dataset.origIdx = item.origIdx;
+
+    card.innerHTML =
+      '<div class="mlo-sc-photo-wrap">' +
+        '<img class="mlo-sc-photo" src="' + d.img + '" alt="' + d.name + '" loading="lazy">' +
+        '<div class="mlo-sc-photo-overlay"></div>' +
+        '<div class="mlo-sc-photo-bottom">' +
+          '<div class="mlo-sc-name">' + d.name + '</div>' +
+          '<div class="mlo-sc-server" style="color:' + d.serverColor + ';">' + d.server + '</div>' +
+        '</div>' +
+        '<div class="mlo-sc-accent" style="background:' + d.serverColor + ';"></div>' +
+      '</div>';
+
+    track.appendChild(card);
+  });
+
+  // Dots — one per original item
+  mloSpotData.forEach(function(d, i) {
+    var dot = document.createElement('div');
+    dot.className = 'msd-dot';
+    dot.dataset.idx = i;
+    dot.addEventListener('click', function() { goToMloSpot(parseInt(this.dataset.idx)); });
+    dotsEl.appendChild(dot);
+  });
+
+  positionMloSpot(msCurrent, false);
+}
+
+function positionMloSpot(idx, animate) {
+  var track = document.getElementById('mlo-spot-track');
+  var cards = track.querySelectorAll('.mlo-sc');
+  var dots  = document.getElementById('mlo-spot-dots').querySelectorAll('.msd-dot');
+  var outer = document.querySelector('.mlo-spot-outer');
+
+  if (!animate) track.style.transition = 'none';
+  else track.style.transition = 'transform 0.7s cubic-bezier(0.4,0,0.2,1)';
+
+  var outerW = outer.offsetWidth;
+  var cardW  = cards[0] ? cards[0].offsetWidth : 260;
+  var gap    = 16;
+
+  // Center the active card — offset by one full set (msTotal) to use middle copy
+  var activeGlobal = msTotal + idx; // use middle copy
+  var centerOffset = outerW / 2 - cardW / 2;
+  var translateX = centerOffset - activeGlobal * (cardW + gap);
+  track.style.transform = 'translateX(' + translateX + 'px)';
+
+  // Apply clear/blur classes — relative to activeGlobal
+  var halfClear = Math.floor(SPOT_CLEAR / 2); // 2 left, center, 2 right
+  cards.forEach(function(c, i) {
+    c.classList.remove('msc-clear', 'msc-blur');
+    var dist = i - activeGlobal;
+    if (Math.abs(dist) <= halfClear) c.classList.add('msc-clear');
+    else c.classList.add('msc-blur');
+  });
+
+  dots.forEach(function(d, i) {
+    d.classList.toggle('active', i === idx);
+  });
+
+  if (!animate) {
+    requestAnimationFrame(function() {
+      track.style.transition = 'transform 0.7s cubic-bezier(0.4,0,0.2,1)';
+    });
+  }
+}
+
+function goToMloSpot(idx) {
+  msCurrent = ((idx % msTotal) + msTotal) % msTotal;
+  positionMloSpot(msCurrent, true);
+  resetMsTimer();
+}
+
+function nextMloSpot() {
+  msCurrent = (msCurrent + 1) % msTotal;
+  positionMloSpot(msCurrent, true);
+}
+
+function resetMsTimer() {
+  clearInterval(msTimer);
+  msTimer = setInterval(nextMloSpot, 5000);
+}
+
+buildMloSpot();
+resetMsTimer();
+window.addEventListener('resize', function() { positionMloSpot(msCurrent, false); });
+
+// ── MAP LOAD ANIMATION ──
+(function(){
+  var overlay   = document.getElementById('map-load-overlay');
+  var canvas    = document.getElementById('map-wireframe-canvas');
+  var mapImg    = document.getElementById('map-img');
+  var pctEl     = document.getElementById('map-load-pct');
+  var barFill   = document.getElementById('map-load-bar-fill');
+  var barGlow   = document.getElementById('map-load-bar-glow');
+  var subEl     = document.getElementById('map-load-sub');
+  var ctx       = canvas.getContext('2d');
+
+  var scanImg   = new Image();
+  scanImg.crossOrigin = 'anonymous';
+  scanImg.src   = 'https://i.ibb.co/MkhSCRWt/Milos-Map3.png';
+
+  var pct = 0;
+  var scanY = 0;
+  var rafId;
+  var started = false;
+
+  var phases = [
+    { at: 0,  label: 'INITIALIZING MAP DATA' },
+    { at: 18, label: 'LOADING TERRAIN MESH...' },
+    { at: 35, label: 'MAPPING ZONE BOUNDARIES...' },
+    { at: 55, label: 'RENDERING WIREFRAME...' },
+    { at: 72, label: 'APPLYING TEXTURES...' },
+    { at: 88, label: 'FINALIZING MLO DATA...' },
+    { at: 98, label: 'COMPLETE' },
+  ];
+
+  function resizeCanvas() {
+    var wrap = canvas.parentElement;
+    canvas.width  = wrap.offsetWidth;
+    canvas.height = wrap.offsetHeight;
+  }
+
+  function drawScan(progress) {
+    if (!scanImg.complete || scanImg.naturalWidth === 0) return;
+    resizeCanvas();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    var revealH = Math.floor(canvas.height * progress);
+
+    // Draw the map revealed so far — desaturated / blue-tinted wireframe feel
+    ctx.save();
+    ctx.rect(0, 0, canvas.width, revealH);
+    ctx.clip();
+    ctx.drawImage(scanImg, 0, 0, canvas.width, canvas.height);
+    // Blue overlay tint on revealed portion
+    ctx.globalCompositeOperation = 'multiply';
+    ctx.fillStyle = '#003a5c';
+    ctx.fillRect(0, 0, canvas.width, revealH);
+    ctx.globalCompositeOperation = 'screen';
+    ctx.fillStyle = 'rgba(0,100,160,0.35)';
+    ctx.fillRect(0, 0, canvas.width, revealH);
+    ctx.restore();
+
+    // Scanline glow at the reveal edge — wide soft bloom + sharp line
+    if (revealH < canvas.height) {
+      // Wide soft bloom
+      var grad = ctx.createLinearGradient(0, revealH - 40, 0, revealH + 10);
+      grad.addColorStop(0,   'rgba(0,191,255,0)');
+      grad.addColorStop(0.5, 'rgba(0,191,255,0.18)');
+      grad.addColorStop(0.85,'rgba(0,191,255,0.55)');
+      grad.addColorStop(1,   'rgba(0,191,255,0)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, revealH - 40, canvas.width, 50);
+
+      // Medium glow band
+      var grad2 = ctx.createLinearGradient(0, revealH - 8, 0, revealH + 4);
+      grad2.addColorStop(0,   'rgba(100,220,255,0)');
+      grad2.addColorStop(0.6, 'rgba(100,220,255,0.75)');
+      grad2.addColorStop(1,   'rgba(100,220,255,0)');
+      ctx.fillStyle = grad2;
+      ctx.fillRect(0, revealH - 8, canvas.width, 12);
+
+      // Sharp bright leading edge
+      ctx.fillStyle = 'rgba(210,245,255,0.95)';
+      ctx.fillRect(0, revealH - 1, canvas.width, 2);
+    }
+
+    // Horizontal scan lines on revealed area for wireframe texture
+    ctx.save();
+    ctx.globalAlpha = 0.07;
+    ctx.fillStyle = '#000';
+    for (var y = 0; y < revealH; y += 3) {
+      ctx.fillRect(0, y, canvas.width, 1);
+    }
+    ctx.restore();
+  }
+
+  function updateLabel(p) {
+    var label = phases[0].label;
+    for (var i = 0; i < phases.length; i++) {
+      if (p >= phases[i].at) label = phases[i].label;
+    }
+    subEl.textContent = label;
+  }
+
+  var startTime = null;
+  var DURATION = 2000; // total ms for 0->100
+
+  // Smooth easing: slow start, steady middle, slight ease at end
+  function easeProgress(t) {
+    // t = 0..1, returns 0..1
+    // Cubic ease-in-out with a slight stall feel around 60-75%
+    if (t < 0.5) return 2 * t * t;
+    return -1 + (4 - 2 * t) * t;
+  }
+
+  function tick(timestamp) {
+    if (!startTime) startTime = timestamp;
+    var elapsed = timestamp - startTime;
+    var t = Math.min(elapsed / DURATION, 1);
+    pct = easeProgress(t) * 100;
+
+    var display = Math.min(Math.floor(pct), 100);
+    pctEl.innerHTML = display + '<span>%</span>';
+    barFill.style.width = pct + '%';
+    barGlow.style.width = pct + '%';
+    updateLabel(display);
+    drawScan(pct / 100);
+
+    if (t < 1) {
+      rafId = requestAnimationFrame(tick);
+    } else {
+      pct = 100;
+      pctEl.innerHTML = '100<span>%</span>';
+      barFill.style.width = '100%';
+      barGlow.style.width = '100%';
+      drawScan(1);
+      // Smooth fade: map fades in while overlay fades out together
+      setTimeout(function(){
+        mapImg.style.transition = 'opacity 0.8s cubic-bezier(0.4,0,0.2,1)';
+        mapImg.style.opacity = '1';
+        overlay.style.transition = 'opacity 0.8s cubic-bezier(0.4,0,0.2,1)';
+        overlay.classList.add('done');
+        setTimeout(function(){ overlay.style.display = 'none'; }, 900);
+        setTimeout(showGiveaway, 950);
+      }, 180);
+    }
+  }
+
+  function startLoad() {
+    if (started) return;
+    started = true;
+    resizeCanvas();
+    rafId = requestAnimationFrame(tick);
+  }
+
+  // Start when main becomes visible (after preloader flies away ~4.2s)
+  setTimeout(startLoad, 4300);
+  window.addEventListener('resize', resizeCanvas);
+})();
 
 </script>
 
