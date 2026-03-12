@@ -626,6 +626,16 @@
                   box-shadow 0.3s ease;
     }
     .luf-item.visible { transform: translateY(0); opacity: 1; }
+    /* Neon flash on new item — glows bright then fades away */
+    .luf-item.neon-flash {
+      animation: lufNeonFlash 2.2s ease-out forwards;
+    }
+    @keyframes lufNeonFlash {
+      0%   { box-shadow: 0 0 0px #00bfff00; border-color: #00bfff22; }
+      8%   { box-shadow: 0 0 18px #00bfffcc, 0 0 40px #00bfff88, 0 0 70px #00bfff44; border-color: #00bfffdd; }
+      20%  { box-shadow: 0 0 14px #00bfff99, 0 0 30px #00bfff55; border-color: #00bfffaa; }
+      100% { box-shadow: 0 0 18px #00bfff0a; border-color: #00bfff22; }
+    }
     .luf-item.clear {
       filter: none;
       box-shadow: 0 0 18px #00bfff0a;
@@ -1575,6 +1585,7 @@ function switchTab(tab) {
 }
 
 function openPanel(zone) {
+  playZoneClick();
   currentZone = zone;
   selectedVideoIdx = -1;
   document.getElementById('panel-zone-title').textContent = zone;
@@ -1799,6 +1810,57 @@ whySection.addEventListener('mouseleave', function() {
   document.body.classList.remove('features-focus');
 });
 
+// ── SOUNDS ──
+var AudioCtx = window.AudioContext || window.webkitAudioContext;
+var audioCtx = null;
+
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new AudioCtx();
+  return audioCtx;
+}
+
+// Soft chime: two sine tones fading out
+function playZoneClick() {
+  try {
+    var ctx = getAudioCtx();
+    var freqs = [523.25, 659.25]; // C5, E5 — soft major third
+    freqs.forEach(function(freq, i) {
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, ctx.currentTime);
+      gain.gain.setValueAtTime(0, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.13, ctx.currentTime + 0.01 + i * 0.06);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6 + i * 0.1);
+      osc.start(ctx.currentTime + i * 0.06);
+      osc.stop(ctx.currentTime + 0.8);
+    });
+  } catch(e) {}
+}
+
+// Soft rising shimmer: quick ascending tones — map loaded
+function playMapComplete() {
+  try {
+    var ctx = getAudioCtx();
+    var notes = [392, 523.25, 659.25, 783.99]; // G4 C5 E5 G5
+    notes.forEach(function(freq, i) {
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, ctx.currentTime);
+      gain.gain.setValueAtTime(0, ctx.currentTime + i * 0.1);
+      gain.gain.linearRampToValueAtTime(0.10, ctx.currentTime + i * 0.1 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.1 + 0.7);
+      osc.start(ctx.currentTime + i * 0.1);
+      osc.stop(ctx.currentTime + i * 0.1 + 0.8);
+    });
+  } catch(e) {}
+}
+
 // ── MAP FOCUS BLUR ──
 var mapWrapEl = document.querySelector('.map-wrap');
 mapWrapEl.addEventListener('mouseenter', function() {
@@ -1960,9 +2022,14 @@ function lufPushItem() {
   // Prepend (new items go to top)
   lufList.insertBefore(el, lufList.firstChild);
 
-  // Animate in
+  // Animate in + neon flash
   requestAnimationFrame(function(){
-    requestAnimationFrame(function(){ el.classList.add('visible'); });
+    requestAnimationFrame(function(){
+      el.classList.add('visible');
+      el.classList.add('neon-flash');
+      // Remove flash class after animation so it doesn't interfere with hover
+      setTimeout(function(){ el.classList.remove('neon-flash'); }, 2200);
+    });
   });
 
   lufApplyClasses();
@@ -2347,6 +2414,7 @@ window.addEventListener('resize', function() { positionMloSpot(msCurrent, false)
       drawScan(1);
       // Smooth fade: map fades in while overlay fades out together
       setTimeout(function(){
+        playMapComplete();
         mapImg.style.transition = 'opacity 0.8s cubic-bezier(0.4,0,0.2,1)';
         mapImg.style.opacity = '1';
         overlay.style.transition = 'opacity 0.8s cubic-bezier(0.4,0,0.2,1)';
@@ -2357,10 +2425,47 @@ window.addEventListener('resize', function() { positionMloSpot(msCurrent, false)
     }
   }
 
+  // Ticking counter sound — rapid soft clicks that speed up then slow at the end
+  function playCounterTick(progress) {
+    try {
+      var ctx = getAudioCtx();
+      // Pitch rises slightly as counter climbs
+      var freq = 800 + progress * 600;
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, ctx.currentTime);
+      gain.gain.setValueAtTime(0.055, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.045);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.05);
+    } catch(e) {}
+  }
+
+  var lastTickPct = -1;
+  var tickInterval = null;
+
+  function startCounterSound() {
+    // Fire ticks based on current pct — faster in the middle, slower at start/end
+    tickInterval = setInterval(function() {
+      var currentPct = Math.floor(pct);
+      if (currentPct !== lastTickPct && currentPct > 0) {
+        lastTickPct = currentPct;
+        playCounterTick(currentPct / 100);
+      }
+      if (currentPct >= 100) {
+        clearInterval(tickInterval);
+      }
+    }, 18);
+  }
+
   function startLoad() {
     if (started) return;
     started = true;
     resizeCanvas();
+    startCounterSound();
     rafId = requestAnimationFrame(tick);
   }
 
