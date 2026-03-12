@@ -4,6 +4,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>YBN Milos | MLO World</title>
+
+  <!-- SEO & Link Preview Meta Tags -->
+  <meta name="description" content="Premium FiveM MLOs by YBN Milos. Hand-crafted map modifications for Detroit, Chicago, Philly, Baltimore, Baton Rouge, Los Santos and more. Zero lag, easy install, 8000+ customers.">
+  <meta name="keywords" content="FiveM MLO, YBN Milos, FiveM maps, GTA roleplay, MLO pack, FiveM server">
+  <meta name="author" content="YBN Milos">
+
+  <!-- Open Graph (Facebook, Discord, WhatsApp) -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ybnmilos-mlo-world.tebex.io/">
+  <meta property="og:title" content="YBN Milos | MLO World — Premium FiveM Maps">
+  <meta property="og:description" content="Premium FiveM MLOs trusted by 8000+ customers. Detroit, Chicago, Philly, Baltimore, Baton Rouge, Los Santos & more. Easy install, 24/7 support.">
+  <meta property="og:image" content="https://i.ibb.co/8nrDrGY3/YBN.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="YBN Milos MLO World">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="YBN Milos | MLO World — Premium FiveM Maps">
+  <meta name="twitter:description" content="Premium FiveM MLOs trusted by 8000+ customers. Easy install, 24/7 support.">
+  <meta name="twitter:image" content="https://i.ibb.co/8nrDrGY3/YBN.jpg">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="https://i.ibb.co/cSYFH6Y1/YBNLogo.png">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -618,14 +642,14 @@
       cursor: pointer;
       text-decoration: none;
       display: block;
-      transform: translateY(-16px);
+      transform: translateX(120px);
       opacity: 0;
-      transition: transform 0.55s cubic-bezier(0.4,0,0.2,1),
-                  opacity 0.55s cubic-bezier(0.4,0,0.2,1),
+      transition: transform 0.6s cubic-bezier(0.34,1.2,0.64,1),
+                  opacity 0.5s cubic-bezier(0.4,0,0.2,1),
                   filter 0.55s ease,
                   box-shadow 0.3s ease;
     }
-    .luf-item.visible { transform: translateY(0); opacity: 1; }
+    .luf-item.visible { transform: translateX(0); opacity: 1; }
     /* Neon flash on new item — glows bright then fades away */
     .luf-item.neon-flash {
       animation: lufNeonFlash 2.2s ease-out forwards;
@@ -954,7 +978,7 @@
       pointer-events: none;
     }
 
-    /* ══ MLO SPOTLIGHT SLIDER ══ */
+    /* ══ SERVER FEATURES SLIDER ══ */
     #mlo-spotlight-section {
       position: relative; z-index: 1;
       padding: 50px 0 10px;
@@ -1247,11 +1271,11 @@
     <div class="stat"><div class="stat-number">24/7</div><div class="stat-label">Support</div></div>
   </div>
 
-  <!-- MLO SPOTLIGHT -->
+  <!-- SERVER FEATURES -->
   <div id="mlo-spotlight-section">
     <div class="mlo-spot-label">
-      <span class="mlo-spot-eyebrow">// Seen On Popular Servers</span>
-      <h2 class="mlo-spot-title">MLO SPOTLIGHT</h2>
+      <span class="mlo-spot-eyebrow">// Server Features</span>
+      <h2 class="mlo-spot-title">SERVER FEATURES</h2>
     </div>
     <div class="mlo-spot-outer">
       <div class="mlo-spot-fade-left"></div>
@@ -1424,85 +1448,85 @@
 var zoneData = {
   'Southside': {
     videos: [
-      { name:'Southside MLO #1',  url:'https://www.youtube.com/watch?v=FbCSYRm6mow' },
-      { name:'Southside MLO #2',  url:'https://youtu.be/0bhT4pMmRL4' },
-      { name:'Southside MLO #3',  url:'https://youtu.be/MMOTmFimgf0' },
-      { name:'Southside MLO #4',  url:'https://youtu.be/3ncWSLG-mO4' },
-      { name:'Southside MLO #5',  url:'https://youtu.be/ua-0opjbr7U' },
-      { name:'Southside MLO #6',  url:'https://youtu.be/FpJnMYpXiy0' },
-      { name:'Southside MLO #7',  url:'https://youtu.be/n5goysi3LJY' },
-      { name:'Southside MLO #8',  url:'https://youtu.be/uNaVcopduc8' },
-      { name:'Southside MLO #9',  url:'https://youtu.be/qrbjzS171p0' },
-      { name:'Southside MLO #10', url:'https://youtu.be/580jwezPG_g' },
-      { name:'Southside MLO #11', url:'https://youtu.be/3_SC36Q1eSE' },
-      { name:'Southside MLO #12', url:'https://youtu.be/iYYm0EWPGgU' },
-      { name:'Southside MLO #13', url:'https://youtu.be/iZl3rPJEW2o' },
-      { name:'Southside MLO #14', url:'https://youtu.be/Vcmjd2qwG4g' },
-      { name:'Southside MLO #15', url:'https://youtu.be/PM_zdlQUoo8' },
-      { name:'Southside MLO #16', url:'https://youtu.be/5C_sPe4ilhs' },
-      { name:'Southside MLO #17', url:'https://youtu.be/MoS_PQSdnFY' },
-      { name:'Southside MLO #18', url:'https://youtu.be/ayizgh34onk' },
-      { name:'Southside MLO #19', url:'https://youtu.be/MHgU6XPKx3A' },
-      { name:'Southside MLO #20', url:'https://youtu.be/YuRUfQ_MuvY' },
-      { name:'Southside MLO #21', url:'https://youtu.be/N-hVY9UK7DM' },
-      { name:'Southside MLO #22', url:'https://youtu.be/0FYMPY0iFhE' },
-      { name:'Southside MLO #23', url:'https://youtu.be/zizqR1YcR6c' },
-      { name:'Southside MLO #24', url:'https://youtu.be/0EOXbPq1CIE' }
+      { name:'Detroit',                  url:'https://www.youtube.com/watch?v=FbCSYRm6mow' },
+      { name:'Chicago Extension 2',      url:'https://youtu.be/0bhT4pMmRL4' },
+      { name:'Chicago Extension 1',      url:'https://youtu.be/MMOTmFimgf0' },
+      { name:'Baton Rouge',              url:'https://youtu.be/3ncWSLG-mO4' },
+      { name:'Baldwin Village Extension',url:'https://youtu.be/ua-0opjbr7U' },
+      { name:'Chicago',                  url:'https://youtu.be/FpJnMYpXiy0' },
+      { name:'RimShop',                  url:'https://youtu.be/n5goysi3LJY' },
+      { name:'New Watts',                url:'https://youtu.be/uNaVcopduc8' },
+      { name:'Beauty Shop',              url:'https://youtu.be/qrbjzS171p0' },
+      { name:'Baldwin Village',         url:'https://youtu.be/580jwezPG_g' },
+      { name:'Playa del Seville',       url:'https://youtu.be/3_SC36Q1eSE' },
+      { name:'San Andreas Interiors',   url:'https://youtu.be/iYYm0EWPGgU' },
+      { name:'Idlewood Projects',       url:'https://youtu.be/iZl3rPJEW2o' },
+      { name:'San Andreas Grove Street',url:'https://youtu.be/Vcmjd2qwG4g' },
+      { name:'San Fernando',            url:'https://youtu.be/PM_zdlQUoo8' },
+      { name:'Verona Mall',             url:'https://youtu.be/5C_sPe4ilhs' },
+      { name:'Grove Street',            url:'https://youtu.be/MoS_PQSdnFY' },
+      { name:'Grove Street Interiors',  url:'https://youtu.be/ayizgh34onk' },
+      { name:'Nail Saloon',             url:'https://youtu.be/MHgU6XPKx3A' },
+      { name:'Nickerson Gardens',       url:'https://youtu.be/YuRUfQ_MuvY' },
+      { name:'V3Hoods / Jordan Downs',  url:'https://youtu.be/N-hVY9UK7DM' },
+      { name:'Walmart / Utool',         url:'https://youtu.be/0FYMPY0iFhE' },
+      { name:'Catholic Church',         url:'https://youtu.be/zizqR1YcR6c' },
+      { name:'Corner Store',            url:'https://youtu.be/0EOXbPq1CIE' }
     ],
     files: ['lr_sc1_occl_00.ymap','lr_sc1_occl_01.ymap','lr_sc1_occl_02.ymap','lr_sc1_occl_03.ymap']
   },
   'Downtown': {
     videos: [
-      { name:'Downtown MLO #1', url:'https://youtu.be/KeGu_M0qBBQ' },
-      { name:'Downtown MLO #2', url:'https://youtu.be/Ml8tQYuWh9M' },
-      { name:'Downtown MLO #3', url:'https://youtu.be/Vvd80W1mCIM' },
-      { name:'Downtown MLO #4', url:'https://youtu.be/WEQ4CyoCikM' },
-      { name:'Downtown MLO #5', url:'https://youtu.be/lFtYjGJkuLk' },
-      { name:'Downtown MLO #6', url:'https://youtu.be/YSXUbeLnwRM' },
-      { name:'Downtown MLO #7', url:'https://youtu.be/1X1NwjALHhI' }
+      { name:'Rockford Mall Addon 1',   url:'https://youtu.be/KeGu_M0qBBQ' },
+      { name:'Rockford Mall',           url:'https://youtu.be/Ml8tQYuWh9M' },
+      { name:'Rockford Mall Addon 2',   url:'https://youtu.be/Vvd80W1mCIM' },
+      { name:'Rockford Mall Casino',    url:'https://youtu.be/WEQ4CyoCikM' },
+      { name:'Chicago Skyscrapers',     url:'https://youtu.be/lFtYjGJkuLk' },
+      { name:'Dunkin / Rusty Brown',    url:'https://youtu.be/YSXUbeLnwRM' },
+      { name:'School / Football / Basketball', url:'https://youtu.be/1X1NwjALHhI' }
     ],
     files: ['apa_ss1_occl_00.ymap','apa_ss1_occl_01.ymap','hei_kt1_occl_02.ymap','hei_sm_occl_00.ymap','hei_sm_occl_02.ymap','hei_sm_occl_03.ymap','vb_occl_00.ymap','apa_ss1_occl_02.ymap','apa_ss1_occl_03.ymap','ch1_far_occl_00.ymap','hei_bh1_occl_00.ymap','hei_bh1_occl_02.ymap','hei_bh1_occl_04.ymap','hei_bh1_occl_05.ymap','hei_dt1_occl_01.ymap','hei_dt1_occl_02.ymap','hei_dt1_occl_03.ymap','hei_dt1_occl_04.ymap','hei_dt1_occl_06.ymap','hei_dt1_occl_07.ymap','hei_hw1_occl_00.ymap','hei_hw1_occl_01.ymap']
   },
   'Vespucci': {
     videos: [
-      { name:'Vespucci MLO #1', url:'https://youtu.be/Lh8vWM_i37s' },
-      { name:'Vespucci MLO #2', url:'https://youtu.be/BHOvo0qkWMU' },
-      { name:'Vespucci MLO #3', url:'https://youtu.be/aJt0JvS56z4' },
-      { name:'Vespucci MLO #4', url:'https://youtu.be/K0zML8S2W2Q' },
-      { name:'Vespucci MLO #5', url:'https://youtu.be/uEjY3KwmVv0' },
-      { name:'Vespucci MLO #6', url:'https://youtu.be/Yv1hOUS8ZBE' },
-      { name:'Vespucci MLO #7', url:'https://youtu.be/qs0NWvQJvhA' }
+      { name:'Chicago Vespucci',    url:'https://youtu.be/Lh8vWM_i37s' },
+      { name:'La Puerta',           url:'https://youtu.be/BHOvo0qkWMU' },
+      { name:'Pink Trap House v1',  url:'https://youtu.be/aJt0JvS56z4' },
+      { name:'Pink Trap House v2',  url:'https://youtu.be/K0zML8S2W2Q' },
+      { name:'Taco / Drug Shop',    url:'https://youtu.be/uEjY3KwmVv0' },
+      { name:'Chick Fil A',         url:'https://youtu.be/Yv1hOUS8ZBE' },
+      { name:'Skating Ring',        url:'https://youtu.be/qs0NWvQJvhA' }
     ],
     files: ['vb_occl_00.ymap','vb_occl_01.ymap']
   },
   'East Los Santos': {
     videos: [
-      { name:'East LS MLO #1', url:'https://youtu.be/JjJ5KiggdlA' },
-      { name:'East LS MLO #2', url:'https://youtu.be/y-8kX6PkaQI' },
-      { name:'East LS MLO #3', url:'https://youtu.be/sHV7h6kBhFs' },
-      { name:'East LS MLO #4', url:'https://youtu.be/woUNOury81Q' },
-      { name:'East LS MLO #5', url:'https://youtu.be/uUEQLMD62Ek' }
+      { name:'Elysian Fields', url:'https://youtu.be/JjJ5KiggdlA' },
+      { name:'Las Colinas',    url:'https://youtu.be/y-8kX6PkaQI' },
+      { name:'Jefferson',      url:'https://youtu.be/sHV7h6kBhFs' },
+      { name:'PigPen / Hoods', url:'https://youtu.be/woUNOury81Q' },
+      { name:'East Side Build', url:'https://youtu.be/uUEQLMD62Ek' }
     ],
     files: ['bkr_id1_occl_00.ymap','bkr_id1_occl_01.ymap','bkr_id1_occl_02.ymap','bkr_id1_occl_03.ymap']
   },
   'Vinewood': {
     videos: [
-      { name:'Vinewood MLO #1', url:'https://www.youtube.com/watch?v=imWTxjLhF94' },
-      { name:'Vinewood MLO #2', url:'https://www.youtube.com/watch?v=aQIwYvq9jpM' }
+      { name:'Vinewood Lake',     url:'https://www.youtube.com/watch?v=imWTxjLhF94' },
+      { name:'Vinewood RaveCave', url:'https://www.youtube.com/watch?v=aQIwYvq9jpM' }
     ],
     files: ['apa_ch2_occl_02.ymap','apa_ch2_occl_03.ymap','apa_ch2_occl_04.ymap','apa_ch2_occl_05.ymap','apa_ch2_occl_06.ymap','ch1_far_occl_00.ymap']
   },
   'Baltimore/Philly': {
     videos: [
-      { name:'Baltimore/Philly MLO #1', url:'https://youtu.be/WgQqAChJUnY' },
-      { name:'Baltimore/Philly MLO #2', url:'https://youtu.be/IiF2d3Jzuqg' },
-      { name:'Baltimore/Philly MLO #3', url:'https://youtu.be/Ksz8EYM71Ao' }
+      { name:'Baltimore',    url:'https://youtu.be/WgQqAChJUnY' },
+      { name:'Philadelphia', url:'https://youtu.be/IiF2d3Jzuqg' },
+      { name:'Prison',       url:'https://youtu.be/Ksz8EYM71Ao' }
     ],
     files: ['cs4_occl_01.ymap','cs4_occl_03.ymap','cs4_occl_04.ymap','cs4_occl_05.ymap','cs4_occl_06.ymap']
   },
   'Paleto': {
     videos: [
-      { name:'Paleto MLO #1', url:'https://youtu.be/qPXzf-O6O84' }
+      { name:'Paleto Oxnard', url:'https://youtu.be/qPXzf-O6O84' }
     ],
     files: ['cs1_far_occl_00.ymap','cs1_occl_07.ymap','cs1_occl_09.ymap','cs1_occl_10.ymap','cs1_occl_11.ymap']
   }
@@ -2159,7 +2183,7 @@ buildReviewSlider();
 resetRvTimer();
 window.addEventListener('resize', function(){ positionSlider(rvCurrent, false); });
 
-// ── MLO SPOTLIGHT SLIDER ──
+// ── SERVER FEATURES SLIDER ──
 var mloSpotData = [
   { name: 'YBN',          server: 'Los Los Scandalous', serverColor: '#00bfff', img: 'https://i.ibb.co/8nrDrGY3/YBN.jpg' },
   { name: 'LIL DURK',     server: 'The Trenches',       serverColor: '#00bfff', img: 'https://i.ibb.co/BH0hn58t/download.jpg' },
