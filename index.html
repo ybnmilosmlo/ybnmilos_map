@@ -84,6 +84,28 @@
     .pre-dots span:nth-child(3){animation-delay:.4s;}
     @keyframes dot{0%,100%{opacity:.3}50%{opacity:1}}
 
+    /* ── MAP FOCUS BLUR ── */
+    #main > *,
+    #live-updates-feed,
+    #social-sidebar {
+      transition: filter 0.5s ease, opacity 0.5s ease;
+    }
+    body.map-focus #main > *:not(.hero),
+    body.map-focus #live-updates-feed,
+    body.map-focus #social-sidebar {
+      filter: blur(6px);
+      opacity: 0.25;
+      pointer-events: none;
+    }
+    body.map-focus .hero {
+      filter: none;
+      opacity: 1;
+    }
+    body.map-focus .map-wrap {
+      box-shadow: 0 0 80px #00bfff33, 0 0 120px #00bfff11;
+      border-color: #00bfff55;
+    }
+
     /* ANNOUNCEMENT BAR */
     #announce-bar {
       position: relative; z-index: 20;
@@ -180,7 +202,8 @@
 
     /* HERO / MAP */
     .hero { position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; padding:20px 20px; gap:16px; }
-    .map-wrap { position:relative; width:min(1100px,96vw); overflow:hidden; border-radius:16px; border:1px solid #00bfff22; box-shadow:0 0 40px #00bfff11; }
+    .map-wrap { position:relative; width:min(1100px,96vw); overflow:hidden; border-radius:16px; border:1px solid #00bfff22; box-shadow:0 0 40px #00bfff11; transition: transform 0.5s cubic-bezier(0.4,0,0.2,1), box-shadow 0.5s ease, border-color 0.5s ease; transform-origin: center center; }
+    body.map-focus .map-wrap { transform: scale(1.04); }
     .map-wrap img.map-img { width:100%; display:block; transform-origin:center center; transition:transform .6s cubic-bezier(0.4,0,0.2,1); }
     .map-svg { position:absolute; inset:0; width:100%; height:100%; border-radius:16px; z-index:5; transform-origin:center center; transition:transform .6s cubic-bezier(0.4,0,0.2,1); }
     .hero-logo { position:absolute; top:5%; left:50%; transform:translateX(-50%); width:clamp(100px,15%,190px); z-index:10; filter:drop-shadow(0 0 20px rgba(255,255,255,.6)) drop-shadow(0 0 40px #00bfff44); animation:logoPulse 3s ease-in-out infinite; pointer-events:none; opacity:0; transition: opacity 0.3s ease; }
@@ -226,11 +249,45 @@
     .section-label { position:relative; z-index:1; text-align:center; padding:60px 60px 20px; }
     .section-label span { font-size:11px; font-weight:700; letter-spacing:5px; color:var(--blue); text-transform:uppercase; }
     .features { position:relative; z-index:1; padding:0 60px 80px; display:grid; grid-template-columns:repeat(3,1fr); gap:20px; max-width:1200px; margin:0 auto; }
-    .feature-card { background:var(--dark2); border:1px solid #00bfff11; border-radius:12px; padding:28px; transition:all .4s; }
-    .feature-card:hover { border-color:var(--blue-dim); box-shadow:0 0 30px #00bfff11; transform:translateY(-4px); }
-    .feature-icon { font-size:28px; margin-bottom:12px; }
-    .feature-title { font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:2px; color:#fff; margin-bottom:8px; }
-    .feature-text { font-size:13px; color:#555; line-height:1.7; letter-spacing:.5px; }
+    .feature-card {
+      background: var(--dark2); border: 1px solid #00bfff11;
+      border-radius: 12px; padding: 28px;
+      transition: border-color 0.4s ease, box-shadow 0.4s ease;
+      overflow: hidden; position: relative;
+    }
+    .feature-card:hover {
+      border-color: #00bfff44;
+      box-shadow: 0 0 30px #00bfff11;
+    }
+    .feature-icon {
+      font-size: 28px; margin-bottom: 12px;
+      transition: transform 0.4s ease, opacity 0.4s ease;
+    }
+    .feature-card:hover .feature-icon {
+      transform: translateY(-6px);
+      opacity: 0.4;
+    }
+    .feature-title {
+      font-family: 'Bebas Neue', sans-serif; font-size: 22px;
+      letter-spacing: 2px; color: #fff; margin-bottom: 8px;
+      transition: transform 0.4s cubic-bezier(0.4,0,0.2,1),
+                  opacity 0.4s ease, filter 0.4s ease;
+    }
+    .feature-card:hover .feature-title {
+      transform: translateY(-6px);
+      opacity: 0.35;
+      filter: blur(1.5px);
+    }
+    .feature-text {
+      font-size: 13px; color: #aaa; line-height: 1.7; letter-spacing: .5px;
+      transform: translateY(20px);
+      opacity: 0;
+      transition: transform 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.4s ease;
+    }
+    .feature-card:hover .feature-text {
+      transform: translateY(0);
+      opacity: 1;
+    }
 
     /* FOOTER */
     footer { position:relative; z-index:1; display:flex; align-items:center; justify-content:space-between; padding:26px 50px; border-top:1px solid #00bfff11; flex-wrap:wrap; gap:16px; }
@@ -870,6 +927,23 @@
     }
     .rv-dot.active { background: var(--blue); box-shadow: 0 0 8px #00bfff88; border-color: var(--blue); }
 
+    /* ── WHY CHOOSE US FOCUS ── */
+    #why-choose-section {
+      transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+      transform-origin: center center;
+      position: relative; z-index: 1;
+    }
+    body.features-focus #why-choose-section {
+      transform: scale(1.20);
+    }
+    body.features-focus #main > *:not(#why-choose-section),
+    body.features-focus #live-updates-feed,
+    body.features-focus #social-sidebar {
+      filter: blur(6px);
+      opacity: 0.25;
+      pointer-events: none;
+    }
+
     /* ══ MLO SPOTLIGHT SLIDER ══ */
     #mlo-spotlight-section {
       position: relative; z-index: 1;
@@ -1178,6 +1252,7 @@
   </div>
 
   <!-- FEATURES -->
+  <div id="why-choose-section">
   <div class="section-label"><span>Why Choose Us</span></div>
   <div class="features">
     <div class="feature-card"><div class="feature-icon">🗺️</div><div class="feature-title">Premium MLOs</div><div class="feature-text">Hand-crafted map modifications with zero render issues or lag. Built for performance on any server.</div></div>
@@ -1187,6 +1262,7 @@
     <div class="feature-card"><div class="feature-icon">🎮</div><div class="feature-title">Test Server</div><div class="feature-text">Try before you buy on our live FiveM test server. See every MLO in action before purchasing.</div></div>
     <div class="feature-card"><div class="feature-icon">💰</div><div class="feature-title">Best Prices</div><div class="feature-text">Weekly discounts, bundle deals, and a monthly subscription to get access to everything.</div></div>
   </div>
+  </div><!-- /why-choose-section -->
 
   <!-- REVIEW SLIDER BAR -->
   <div id="review-slider-section">
@@ -1712,6 +1788,24 @@ function copyText(btn,txt){
       if(id==='zone-overlay') closePanel();
     }
   });
+});
+
+// ── WHY CHOOSE US FOCUS ──
+var whySection = document.getElementById('why-choose-section');
+whySection.addEventListener('mouseenter', function() {
+  document.body.classList.add('features-focus');
+});
+whySection.addEventListener('mouseleave', function() {
+  document.body.classList.remove('features-focus');
+});
+
+// ── MAP FOCUS BLUR ──
+var mapWrapEl = document.querySelector('.map-wrap');
+mapWrapEl.addEventListener('mouseenter', function() {
+  document.body.classList.add('map-focus');
+});
+mapWrapEl.addEventListener('mouseleave', function() {
+  document.body.classList.remove('map-focus');
 });
 
 // ── CURSOR ──
