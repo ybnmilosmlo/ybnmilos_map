@@ -1163,6 +1163,28 @@
       nav{padding:14px 16px;}
       .nav-links{display:none;}
     }
+
+    /* ── CONFLICT CARD ── */
+    .conflict-card {
+      cursor: pointer;
+      border-color: #ffaa0033 !important;
+      background: linear-gradient(135deg, #0d0d1f, #120f04) !important;
+      position: relative;
+      transform: scale(1.06) !important;
+      box-shadow: 0 0 30px #ffaa0022, 0 0 60px #ff880011 !important;
+      z-index: 2;
+      animation: conflictPulse 3s ease-in-out infinite;
+    }
+    @keyframes conflictPulse {
+      0%, 100% { box-shadow: 0 0 25px #ffaa0033, 0 0 50px #ff880011; border-color: #ffaa0033; }
+      50%       { box-shadow: 0 0 45px #ffaa0066, 0 0 80px #ff880033; border-color: #ffaa0077; }
+    }
+    .conflict-card .feature-icon { filter: drop-shadow(0 0 6px #ffaa00); }
+    .conflict-card .feature-title { color: #ffcc44 !important; }
+    .conflict-card:hover {
+      transform: scale(1.10) !important;
+      box-shadow: 0 0 55px #ffaa0088, 0 0 100px #ff880044 !important;
+    }
   </style>
 </head>
 <body>
@@ -1293,7 +1315,7 @@
     <div class="feature-card"><div class="feature-icon">🏙️</div><div class="feature-title">Multiple Cities</div><div class="feature-text">Detroit, Chicago, Philly, Baltimore, Baton Rouge, Los Santos and more. Every city with unique character.</div></div>
     <div class="feature-card"><div class="feature-icon">⚡</div><div class="feature-title">Easy Install</div><div class="feature-text">Simple 3-step installation via Keymaster. Download, drag, start. Live in minutes.</div></div>
     <div class="feature-card"><div class="feature-icon">🔧</div><div class="feature-title">Full Support</div><div class="feature-text">Dedicated support team available via Discord. Open a ticket and get answered fast.</div></div>
-    <div class="feature-card"><div class="feature-icon">🎮</div><div class="feature-title">Test Server</div><div class="feature-text">Try before you buy on our live FiveM test server. See every MLO in action before purchasing.</div></div>
+    <div class="feature-card conflict-card" onclick="window.scrollTo({top:0,behavior:'smooth'})"><div class="feature-icon">⚠️</div><div class="feature-title">Map Conflicts?</div><div class="feature-text">Having issues with conflicting MLOs? Click here to identify your problem area and get it fixed fast.</div></div>
     <div class="feature-card"><div class="feature-icon">💰</div><div class="feature-title">Best Prices</div><div class="feature-text">Weekly discounts, bundle deals, and a monthly subscription to get access to everything.</div></div>
   </div>
   </div><!-- /why-choose-section -->
@@ -1981,6 +2003,8 @@ function showGiveaway(){
   ov.style.display = 'flex';
   setTimeout(function(){ ov.classList.add('visible'); }, 50);
 }
+
+
 </script>
 <!-- UPDATES SLIDE-UP PANEL -->
 <!-- LIVE UPDATES FEED -->
